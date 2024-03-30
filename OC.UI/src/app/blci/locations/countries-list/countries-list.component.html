@@ -1,0 +1,15 @@
+
+<p-listbox [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" (onClick)="onClick($event)">
+    <ng-template let-country pTemplate="item">
+        <div class="flex align-items-center p-2 w-full flex-wrap gap-2">
+            <div class="w-full text-center lg:w-auto lg:text-left">
+                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [alt]="country.name" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+            </div>
+            <div class="flex-1">
+                <h5 class="mb-2">{{ country.name }}</h5>
+                <i class="pi pi-tag vertical-align-middle mr-2"></i>
+                <span class="vertical-align-middle line-height-1">{{ country.continentName }}</span>
+            </div>
+        </div>
+    </ng-template>
+</p-listbox>

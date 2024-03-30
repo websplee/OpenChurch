@@ -1,0 +1,47 @@
+version: '3.4'
+
+services: 
+
+  oc.accountingapi:
+    image: websplee/oc.acountingapi
+    build: 
+      context: .
+      dockerfile: oc.accountingapi/Dockerfile
+    ports: 
+      - "1301:443"
+  oc.auditsapi:
+    image: websplee/oc.auditsapi
+    build: 
+      context: .
+      dockerfile: oc.auditsapi/Dockerfile
+    ports: 
+      - "1302:443"
+  oc.branchesapi:
+    image: websplee/oc.branchesapi
+    build: 
+      context: .
+      dockerfile: oc.branchesapi/Dockerfile
+    ports: 
+      - "1303:443"
+  oc.locationsapi:
+    image: websplee/oc.locationsapi
+    build: 
+      context: .
+      dockerfile: oc.locationsapi/Dockerfile
+    ports: 
+      - "1304:443"
+  oc.membersapi:
+    image: websplee/oc.membersapi
+    build: 
+      context: .
+      dockerfile: oc.membersapi/Dockerfile
+    ports: 
+      - "1305:443"
+  oc.usersapi:
+    image: websplee/oc.usersapi
+    build: 
+      context: .
+      dockerfile: oc.usersapi/Dockerfile
+    ports: 
+      - "1306:443"
+    

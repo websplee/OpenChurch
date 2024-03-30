@@ -1,0 +1,74 @@
+<div class="col-12">
+    <div class="card">
+        <h5>{{region.name}} Region's Leaderships List</h5>
+        <p-table #dt1 [value]="regionLeaderships" dataKey="id" [rows]="10" [loading]="loading" [rowHover]="true" styleClass="p-datatable-gridlines"
+                 [paginator]="true" [globalFilterFields]="['name']" responsiveLayout="scroll" [(selection)]="selectedRegionLeadership"
+                 selectionMode="single">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <button pButton label="Clear" class="p-button-outlined mb-2" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                    <span class="p-input-icon-left mb-2">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter (input)="onGlobalFilter(dt1, $event)" placeholder="Search Keyword" class="w-full" />
+                    </span>
+                </div>
+                <div class="col-12 md:col-7 flex-order-0 md:flex-order-1">
+                    <p-toolbar styleClass="p-0 border-none justify-content-end text-right align-items-end">
+                        <ng-template pTemplate="left">
+                            <button pButton pRipple label="Add" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                            <!--<button pButton pRipple label="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedRegionLeaderships()" [disabled]="!selectedRegionLeaderships || !selectedRegionLeaderships.length"></button>-->
+                        </ng-template>
+                    </p-toolbar>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 12rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Picture
+                            <p-columnFilter type="text" field="memberPictureUrl" display="menu"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th style="min-width: 12rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Member Name
+                            <p-columnFilter type="text" field="name" display="menu" placeholder="Search by name"></p-columnFilter>
+                        </div>
+                    </th>
+                    <th style="min-width: 12rem">
+                        <div class="flex justify-content-between align-items-center">
+                            Leadership Role
+                            <p-columnFilter type="text" field="officeLocation" display="menu" placeholder="Search by office location"></p-columnFilter>
+                        </div>
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-regionLeadership>
+                <tr [pSelectableRow]="regionLeadership" (click)="onRegionLeadershipSelected(regionLeadership)">
+                    <td>
+                        <img src="{{regionLeadership.memberPictureUrl != null ? 'regionLeadership.memberPictureUrl' : 'assets/img/avatar.png'}}" width="24" height="24" alt="">
+                    </td>
+                     <td>
+                        {{regionLeadership.memberName}}
+                    </td>
+                    <td>
+                        {{regionLeadership.leadershipRoleName}}
+                    </td>
+                    <td class="justify-content-end text-right">
+                        <button pButton pRipple icon="pi pi-pencil" class="p-button  w-4 h-2 mr-2" (click)="editRegionLeadership(regionLeadership)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="8">No regionLeaderships found.</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="loadingbody">
+                <tr>
+                    <td colspan="8">Loading regionLeaderships data. Please wait.</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

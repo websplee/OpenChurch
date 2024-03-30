@@ -1,0 +1,85 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.accountingapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/accounting/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.auditsapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/audits/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.branchesapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/branches/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.locationsapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/locations/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.membersapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/members/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "oc.usersapi.crystalisedapps.com",
+          "Port": 443
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put" ],
+      "DangerousAcceptAnyServerCertificateValidator": true
+    },
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "https://oc.apigateway.crystalisedapps.com"
+  }
+}

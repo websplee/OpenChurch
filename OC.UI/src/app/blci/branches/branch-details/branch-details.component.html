@@ -1,0 +1,42 @@
+<div class="col-12">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <label htmlFor="name">Branch Name</label>
+                <input pInputText id="name" [(ngModel)]="branch!.name" type="text" required />
+            </div>
+            <div class="field col-12">
+                <label htmlFor="address">Physical Address</label>
+                <input pInputTextarea id="address" rows="4" [(ngModel)]="branch!.physicalAddress" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="phone1">Phone One</label>
+                <input pInputText id="phone1" type="text" [(ngModel)]="branch!.phone1" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="phone2">Phone Two</label>
+                <input pInputText id="phone2" type="text" [(ngModel)]="branch!.phone2" />
+            </div>
+            <div class="field col-12">
+                <label htmlFor="email">Email</label>
+                <input pInputText id="email" type="email" [(ngModel)]="branch!.email"/>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="longitude">Longitude</label>
+                <input pInputText id="longitude" type="text" [(ngModel)]="branch!.longitude" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="latitude">Latitude</label>
+                <input pInputText id="latitude" type="text" [(ngModel)]="branch!.latitude" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <p-toggleButton [(ngModel)]="branch!.ownBuilding" id="ownBuilding" onLabel="Our Building" offLabel="Renting" onIcon="pi pi-check" offIcon="pi pi-times" [style]="{ width: '10em' }"></p-toggleButton>
+            </div>
+            <div class="field col-12 md:col-6">
+                <p-toggleButton [(ngModel)]="branch!.isActive"  id="isActive" onLabel="Active" offLabel="Disabled" onIcon="pi pi-check" offIcon="pi pi-times" [style]="{ width: '10em' }"></p-toggleButton>
+            </div>
+        </div>
+    <div class="flex flex-wrap gap-2 align-items-end">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-warning" (click)="closeWindow()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="saveBranch()"></button>
+    </div>
+</div>

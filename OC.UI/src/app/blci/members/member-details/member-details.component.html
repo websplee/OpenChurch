@@ -1,0 +1,109 @@
+<div class="p-fluid col-12">
+    <div class="formgrid grid">
+        <div class="field col-4">
+            <img [alt]="member.name" src="https://source.unsplash.com/random/300x300/?portraits" width="150" class="mt-0 mx-auto mb-5 block shadow-2">
+        </div>
+        <div class="field col-8">
+            <div class="formgrid grid">
+                <div class="field col-4">
+                    <label for="title">Title</label>
+                    <input pInputText id="title" [(ngModel)]="member.title" />
+                </div>
+                <div class="field col-8">
+                    <label for="name">Fullname</label>
+                    <input pInputText id="name" [(ngModel)]="member.name" />
+                </div>
+            </div>
+            <div class="formgrid grid">
+                <div class="field col-4">
+                    <label for="code">Code</label>
+                    <input pInputText id="code" [(ngModel)]="member.code" />
+                </div>
+                <div class="field col-8">
+                    <label for="email">Email</label>
+                    <input pInputText id="email" [(ngModel)]="member.email" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="formgrid grid">
+        <div class="field col-6">
+            <label for="branchId">Branch</label>
+            <input pInputText id="branchId" [(ngModel)]="member.branchId" />
+        </div>
+        <div class="field col-6">
+            <label for="cellGroupId">Cell Group</label>
+            <input pInputText id="cellGroupId" [(ngModel)]="member.cellGroupId" />
+        </div>
+    </div>
+    <div class="formgrid grid">
+        <div class="field col-4">
+            <label for="gender">Gender</label>
+            <input pInputText id="gender" [(ngModel)]="member.gender" />
+        </div>
+        <div class="field col-4">
+            <label for="dateOfBirth">D.O.B</label>
+            <p-calendar id="dateOfBirth" [(ngModel)]="member.dateOfBirth" [showIcon]="true"></p-calendar>
+        </div>
+        <div class="field col-4">
+            <label for="maritalStatus">Marital Status</label>
+            <input pInputText id="maritalStatus" [(ngModel)]="member.maritalStatus" />
+        </div>
+    </div>
+    <div class="formgrid grid">
+        <div class="field col-6">
+            <label for="educationLevel">Education</label>
+            <input pInputText id="educationLevel" [(ngModel)]="member.educationLevel" />
+        </div>
+        <div class="field col-6">
+            <label for="occupation">Occupation</label>
+            <input pInputText id="occupation" [(ngModel)]="member.occupation" />
+        </div>
+    </div>
+    <div class="formgrid grid">
+        <div class="col-4">
+            <div class="field">
+                <label for="dateJoined">Date Joined BLCI</label>
+                <p-calendar id="dateJoined" [(ngModel)]="member.dateJoined" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="field">
+                <label for="dateBornAgain">Date Born Again</label>
+                <p-calendar id="dateBornAgain" [(ngModel)]="member.dateBornAgain" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="field">
+                <label for="dateBaptised">Date Baptised</label>
+                <p-calendar id="dateBaptised" [(ngModel)]="member.dateBaptised" [showIcon]="true"></p-calendar>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="formgrid grid">
+                <div class="field col-6">
+                    <label for="mobileNumber">Phone #</label>
+                    <input pInputText id="mobileNumber" [(ngModel)]="member.mobileNumber" />
+                </div>
+                <div class="field col-6">
+                    <label for="city">City</label>
+                    <input pInputText id="city" [(ngModel)]="member.city" />
+                </div>
+            </div>
+            <div class="field">
+                <label for="address">Address</label>
+                <input pInputText id="address" [(ngModel)]="member.address" />
+            </div>
+            <div class="formgrid grid">
+                <div class="field col-6">
+                    <label for="longitude">Longitude</label>
+                    <input pInputText id="longitude" [(ngModel)]="member.longitude" />
+                </div>
+                <div class="field col-6">
+                    <label for="latitude">Latitude</label>
+                    <input pInputText id="latitude" [(ngModel)]="member.latitude" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card flex justify-content-right flex-wrap gap-2 align-items-end">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-warning" (click)="closeWindow()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="saveMember()"></button>
+    </div>
+</div>

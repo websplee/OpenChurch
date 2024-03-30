@@ -1,0 +1,23 @@
+<div class="card">
+    <p-tabMenu [model]="items" [activeItem]="activeItem" (activeItemChange)="onActiveItemChange($event)"></p-tabMenu>
+    <!--Attendance-->
+    <div *ngIf="activeItem == items[0]">
+        <app-church-program-session-attendance-details></app-church-program-session-attendance-details>
+    </div>
+    <!--Visitors-->
+    <div *ngIf="activeItem == items[1]">
+        <app-church-program-session-visitors-details></app-church-program-session-visitors-details>
+    </div>
+    <!--Income-->
+    <div *ngIf="activeItem == items[2]">
+        <p>Income</p>
+    </div>
+    <!--Pledges-->
+    <div *ngIf="activeItem == items[3]">
+        <p>Pledges</p>
+    </div>
+    <!--Expenses-->
+    <div *ngIf="activeItem == items[4]">
+        <p>Expenses</p>
+    </div>
+</div>

@@ -1,0 +1,108 @@
+<div class="card">
+    <h5>{{page_title}}</h5>
+    <p-table #dt [value]="churchPrograms" dataKey="id" [tableStyle]="{'min-width': '50rem'}" styleClass=" p-datatable-sm"
+             [rows]="15" [showCurrentPageReport]="false" [rowsPerPageOptions]="[15,25,50]" [loading]="loading"
+             [paginator]="false" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} churchPrograms"
+             [globalFilterFields]="['churchProgram.name','churchProgram.shortname','churchProgram.isActive']"
+             [rowHover]="true">
+
+        <ng-template pTemplate="caption">
+            <div class="flex flex-wrap align-items-center justify-content-between">
+
+                <!--Dropdown list of countries and regions-->
+                <div class="col-12 md:col-2 flex-order-1 md:flex-order-0">
+                    <p-dropdown [options]="groupedRegions" [(ngModel)]="selectedRegion" optionLabel="name" placeholder="Select a Region" [group]="true">
+                        <ng-template let-group pTemplate="group">
+                            <div class="flex align-items-center">
+                                <span>{{ group.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <!--Search bar-->
+                <div class="col-12 md:col-3 flex-order-1 md:flex-order-0">
+                    <div class="p-inputgroup w-full">
+                        <span class="p-input-icon-left w-full">
+                            <i class="pi pi-search"></i>
+                            <input type="text" pInputText placeholder="Search..." (input)="dt.filterGlobal($event.target, 'contains')" class="pl-6 w-full" autofocus>
+                        </span>
+                        <button (click)="clear(dt)" type="button" pButton pRipple icon="pi pi-times" styleClass="p-button-warn" type="reset"></button>
+                    </div>
+                </div>
+
+                <div class="col-12 md:col-7 flex-order-0 md:flex-order-1">
+                    <p-toolbar styleClass="p-0 border-none justify-content-end text-right align-items-end">
+                        <ng-template pTemplate="left">
+                            <button pButton pRipple label="Add ChurchProgram" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                            <button pButton pRipple label="Delete ChurchProgram" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedChurchPrograms()" [disabled]="!selectedChurchPrograms || !selectedChurchPrograms.length"></button>
+                        </ng-template>
+
+                        <!--ng-template pTemplate="right">
+                            <p-fileUpload mode="basic" accept="file/*" [maxFileSize]="100000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                            <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help"></button>
+                        </ng-template-->
+                    </p-toolbar>
+                </div>
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 3rem">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th pSortableColumn="name" style="min-width:5rem">
+                    <div class="flex justify-content-start align-items-center">
+                        Name
+                    </div>
+                </th>
+                <th pSortableColumn="description" style="min-width: 5rem">
+                    <div class="flex justify-content-start align-items-center">
+                        Description
+                    </div>
+                </th>
+                <th pSortableColumn="isActive" style="min-width: 5rem">
+                    <div class="flex justify-content-center align-items-center">
+                        Active
+                    </div>
+                </th>
+                <th class="justify-content-center text-center" style="min-width: 5rem;">
+                    Actions
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-churchProgram>
+            <tr>
+                <td>
+                    <p-tableCheckbox [value]="churchPrograms"></p-tableCheckbox>
+                </td>
+                <td>
+                    {{churchProgram.name}}
+                </td>
+                <td>
+                    {{churchProgram.description}}
+                </td>
+                <td class="justify-content-center text-center font-bold">
+                    <i class="pi" [ngClass]="{'true-icon pi-check-circle text-green-500': churchProgram.isActive, 'false-icon pi-times-circle text-red-500': !churchProgram.isActive}"></i>
+                </td>
+                <td class="justify-content-end text-right">
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button  w-4 h-4 mr-2" (click)="editChurchProgram(churchProgram)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button- p-button-danger w-4 h-2" (click)="deleteChurchProgram(churchProgram)"></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="flex align-items-center justify-content-between">
+                In total there are {{churchPrograms ? churchPrograms.length : 0 }} ChurchPrograms.
+            </div>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="7">No churchPrograms found.</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

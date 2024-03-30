@@ -1,0 +1,22 @@
+<div class="grid">
+    <!--Countries listing-->
+    <div class="col-12 md:col-3">
+        <div class="card">
+            <app-countries-list (onCountrySelectedEvent)="onSelectCountry($event)"></app-countries-list>
+        </div>
+    </div>
+    <!--Region information for selected country-->
+    <div class="col-12 md:col-9">
+        <div class="card formgroup-inline">
+            <!--Regions listing-->
+            <div class="col-12 md:col-6">
+                <app-regions-list [country]="selectedCountry" [regions]="selectedCountryRegions" (onRegionSelectedEvent)="onSelectRegion($event)"></app-regions-list>
+            </div>
+            <!--Region Leadership listing-->
+            <div class="col-12 md:col-6">
+                <app-region-leadership-list [region]="selectedRegion"></app-region-leadership-list>
+            </div>
+        </div>
+        
+    </div>
+</div>

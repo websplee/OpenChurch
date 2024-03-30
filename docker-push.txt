@@ -1,0 +1,15 @@
+docker tag oc.accountingapi websplee/oc.accountingapi
+docker tag oc.auditsapi websplee/oc.auditsapi
+docker tag oc.branchesapi websplee/oc.branchesapi
+docker tag oc.locationsapi websplee/oc.locationsapi
+docker tag oc.membersapi websplee/oc.membersapi
+docker tag oc.usersapi websplee/oc.usersapi
+
+docker push websplee/oc.accountingapi
+docker push websplee/oc.auditsapi
+docker push websplee/oc.branchesapi
+docker push websplee/oc.locationsapi
+docker push websplee/oc.membersapi
+docker push websplee/oc.usersapi
+
+EOF

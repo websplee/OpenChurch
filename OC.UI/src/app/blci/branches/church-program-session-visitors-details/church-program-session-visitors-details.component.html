@@ -1,0 +1,35 @@
+<div class="col-12">
+    <div class="card">
+        <h5>Advanced</h5>
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12 md:col-6">
+                <label htmlFor="name">Name</label>
+                <input pInputText id="name" type="text" [(ngModel)]="visitor.name" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="mobileNumber">Phone Number</label>
+                <input pInputText id="mobileNumber" type="text" [(ngModel)]="visitor.mobileNumber" />
+            </div>
+            <div class="field col-12 md:col-12">
+                <label htmlFor="email">Email</label>
+                <input pInputText id="email" type="email" [(ngModel)]="visitor.email" />
+            </div>
+            <div class="field col-12">
+                <label htmlFor="address">Address</label>
+                <input pInputText id="address" type="text" [(ngModel)]="visitor.address" />
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="dateVisited">Date Visited</label>
+                <p-calendar id="dateVisited" [(ngModel)]="visitor.dateVisited" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label htmlFor="dateToVisit">Date to Visit</label>
+                <p-calendar id="dateToVisit" [(ngModel)]="visitor.dateToVisit" [showIcon]="true"></p-calendar>
+            </div>
+            <div class="field col-12">
+                <label htmlFor="comments">Comments</label>
+                <input pInputText id="comments" type="text" [(ngModel)]="visitor.comments" />
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,39 @@
+# Auther 	: Humphrey Mbaulu Chinyama
+# Email		: hmsplee@gmail.com
+# Description	: Open Church Project APIs 
+
+############################################################################################################
+
+API Credentials: 
+Username: outsourcedevs@crystalisedapps.com
+Password: Jesus4Me$$
+
+This will bring a bearer token used to access all the other endpoints
+
+Swagger Endpoints
+
+oc.apigateway.crystalisedapps.com (Non - swagger endpoint but gateway used to access all the other endpoints as described below)
+
+oc.auditsapi.crystalisedapps.com/swagger accessed as oc.apigateway.crystalisedapps.com/api/v1/audits/
+oc.branchesapi.crystalisedapps.com/swagger accessed as oc.apigateway.crystalisedapps.com/api/v1/branches/
+oc.locationsapi.crystalisedapps.com/swagger accessed as oc.apigateway.crystalisedapps.com/api/v1/locations/
+oc.membersapi.crystalisedapps.com/swagger accessed as oc.apigateway.crystalisedapps.com/api/v1/members/
+oc.usersapi.crystalisedapps.com/swagger accessed as oc.apigateway.crystalisedapps.com/api/v1/users/
+
+Standard API Response
+############################################################################################################
+ApiResponse {
+
+public string Version;
+
+public int StatusCode;
+
+public bool IsSuccess;
+
+public object? ErrorMessage;
+
+public object? Result;
+
+}
+
+

@@ -1,0 +1,226 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oc-dev-apis
+  labels:
+    component: oc-dev-apis
+spec:
+  selector:
+    matchLabels:
+      component: oc-dev-apis
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        component: oc-dev-apis
+    spec:
+      containers:
+        - name: oc-accountingapi
+          image: websplee/oc.accountingapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 81
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:81   
+        - name: oc-auditsapi
+          image: websplee/oc.auditsapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 82
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:82     
+        - name: oc-branchesapi
+          image: websplee/oc.branchesapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 83
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:83 
+        - name: oc-locationsapi
+          image: websplee/oc.locationsapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 84
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:84  
+        - name: oc-membersapi
+          image: websplee/oc.membersapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 85
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:85     
+        - name: oc-usersapi
+          image: websplee/oc.usersapi:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 86
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:86            
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+    name: oc-dev-service    
+    labels: 
+        service: oc-dev-service
+spec:
+    ports:
+    - name: accountingapi
+      port: 81
+      protocol: TCP
+      targetPort: 81
+    - name: auditsapi
+      port: 82
+      protocol: TCP
+      targetPort: 82
+    - name: branchesapi
+      port: 83
+      protocol: TCP
+      targetPort: 83
+    - name: locationsapi
+      port: 84
+      protocol: TCP
+      targetPort: 84
+    - name: membersapi
+      port: 85
+      protocol: TCP
+      targetPort: 85
+    - name: usersapi
+      port: 86
+      protocol: TCP
+      targetPort: 86
+    selector:
+      component: oc-dev-apis
+---            
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oc-dev-web
+spec:
+  selector:
+    matchLabels:
+      component: oc-dev-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        component: oc-dev-web
+    spec:
+      containers:
+        - name: oc-web
+          image: websplee/oc-ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+              protocol: TCP   
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+    name: oc-dev-web-service
+spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+        component: oc-dev-web
+    type: ClusterIP
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: oc-api-dev-ingress   
+    annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-devuction"
+        kubernetes.io/ingress.class: "nginx"
+        nginx.ingress.kubernetes.io/rewrite-target: /api/$2      
+        nginx.ingress.kubernetes.io/cors-allow-origin: "*"   
+spec:
+    rules:
+    - host: ocdevapi.crystalisedapps.net
+      http:
+        paths:
+        - path: /api/accounting(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 81
+        - path: /api/audits(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 82
+        - path: /api/branches(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 83
+        - path: /api/locations(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 84
+        - path: /api/members(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 85
+        - path: /api/users(/|$)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-service
+              port:
+                number: 86     
+    tls:
+        - hosts:
+            - ocdevapi.crystalisedapps.net
+          secretName: oc-api-dev-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: oc-dev-web-ingress   
+    annotations:
+        cert-manager.io/cluster-issuer: "letsencrypt-devuction"
+        kubernetes.io/ingress.class: "nginx"
+spec:
+    rules:
+    - host: blcidev.crystalisedapps.net
+      http:
+        paths:        
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: oc-dev-web-service
+              port:
+                number: 80
+    tls:
+        - hosts:
+            - blcidev.crystalisedapps.net
+          secretName: oc-web-dev-tls       

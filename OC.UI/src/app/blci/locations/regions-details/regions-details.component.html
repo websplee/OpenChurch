@@ -1,0 +1,20 @@
+<div class="col-12">
+    <div class="card p-fluid">
+        <h5>Vertical</h5>
+        <div class="field">
+            <label for="name">Name</label>
+            <input type="text" pInputText id="name" [(ngModel)]="region!.name" required autofocus />
+        </div>
+        <div class="field">
+            <label for="officeLocation">Office Location</label>
+            <textarea inputId="officeLocation" pInputTextarea [(ngModel)]="region!.officeLocation" required rows="2" cols="30" style="resize:none"></textarea>
+        </div>
+        <div class="field">
+            <p-toggleButton [(ngModel)]="region!.isActive" id="isActive" ngDefaultControl onLabel="Active" offLabel="Disabled" onIcon="pi pi-check" offIcon="pi pi-times" [style]="{ width: '10em' }"></p-toggleButton>           
+        </div>
+    </div>
+    <div class="flex flex-wrap gap-2">
+        <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-warning" (click)="closeWindow()"></button>
+        <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-success" (click)="saveRegion()" ></button>
+    </div>
+</div>
