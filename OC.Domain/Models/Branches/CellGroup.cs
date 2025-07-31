@@ -14,6 +14,8 @@ namespace OC.Domain.Models.Branches
         public long BranchId { get; set; }
 
         public string Name { get; set; }
+        public string MeetingDay { get; set; }
+        public string MeetingTime { get; set; }
 
         // Relationships
         public virtual Branch Branch { get; set; }

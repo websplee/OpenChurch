@@ -2,11 +2,6 @@
 using OC.Domain.Models.Accounting;
 using OC.Domain.Models.Locations;
 using OC.Domain.Models.Members;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OC.Domain.Models.Branches
 {

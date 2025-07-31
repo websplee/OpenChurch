@@ -29,7 +29,7 @@ namespace OC.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             /*optionsBuilder.UseSqlServer(@"Server=crystalisedapps.com; Initial Catalog=zeeblci_test;User Id=blciuser;Password=B6?0w8nz;TrustServerCertificate=True");*/
-            optionsBuilder.UseSqlServer(@"Server=localhost; Initial Catalog=zeeblci_test;User Id=blciuser;Password=B6?0w8nz;TrustServerCertificate=True");
+            /*optionsBuilder.UseSqlServer(@"Server=localhost; Initial Catalog=zeeblci_test;User Id=blciuser;Password=B6?0w8nz;TrustServerCertificate=True");*/
 
         }
 
@@ -61,6 +61,7 @@ namespace OC.Data
         public DbSet<BranchStaff> BranchStaff { get; set; }
         public DbSet<BranchStaffResignation> BranchStaffResignations { get; set; }
         public DbSet<CellGroup> CellGroups { get; set; }
+        public DbSet<CellGroupHost> CellGroupHosts { get; set; }
         public DbSet<CellLeadership> CellLeaderships { get; set; }
         public DbSet<ChurchProgramSession> ChurchProgramSession { get; set; }
         public DbSet<ChurchProgramSessionAttendance> ChurchProgramSessionAttendances { get; set; }
@@ -71,6 +72,7 @@ namespace OC.Data
         #endregion Branches DbSet
 
         #region Locations DbSet
+        public DbSet<ChurchSettings> ChurchSettings { get; set; }
         public DbSet<Continent> Continents { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<Region> Regions { get; set; }
@@ -264,6 +266,11 @@ namespace OC.Data
             {
                 entity.ToTable("tblCellGroups");
             });
+
+            builder.Entity<CellGroupHost>(entity =>
+            {
+                entity.ToTable("tblCellGroupHosts");
+            });
             
             builder.Entity<CellLeadership>(entity =>
             {
@@ -395,6 +402,11 @@ namespace OC.Data
             #endregion Branches Builder Entities
 
             #region Locations Builder Entities
+            builder.Entity<ChurchSettings>(entity =>
+            {
+                entity.ToTable("tblChurchSettings");
+            });
+
             builder.Entity<Continent>(entity =>
             {
                 entity.ToTable("tblContinents")

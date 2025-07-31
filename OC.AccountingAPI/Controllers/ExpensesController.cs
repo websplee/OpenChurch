@@ -15,10 +15,10 @@ namespace OC.AccountingAPI.Controllers
     public class ExpensesController : ControllerBase
     {
         private readonly ILogger _logger;
-        private IUnitOfWork<Expense> _unitOfWork;
+        private IUnitOfWork<ExpenseViewModel> _unitOfWork;
         private readonly IMapper _mapper;
 
-        public ExpensesController(IMapper mapper, IUnitOfWork<Expense> unitOfWork, ILogger<ExpensesController> logger)
+        public ExpensesController(IMapper mapper, IUnitOfWork<ExpenseViewModel> unitOfWork, ILogger<ExpensesController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -29,7 +29,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all expense
         /// </summary>
         /// <returns>List of expense</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Expense>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExpenseViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetExpenses()
@@ -42,7 +42,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all expense
         /// </summary>
         /// <returns>List of expense</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Expense>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExpenseViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeexpenses")]
         public IActionResult GetActiveExpenses()
@@ -55,7 +55,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get expense by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Expense>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ExpenseViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetExpense([FromRoute] long id)
@@ -72,12 +72,12 @@ namespace OC.AccountingAPI.Controllers
                 throw new NotFoundException($"Expense Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Expense>(expense));
+            return Ok(_mapper.Map<ExpenseViewModel>(expense));
         }
 
         // PUT: api/Expense/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense([FromRoute] long id, [FromBody] Expense expense)
+        public async Task<IActionResult> PutExpense([FromRoute] long id, [FromBody] ExpenseViewModel expense)
         {
             if (!ModelState.IsValid)
             {
@@ -134,7 +134,7 @@ namespace OC.AccountingAPI.Controllers
         /// <param name="expenseViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedExpenseIsActive(long id, [FromBody] Expense expenseViewModel)
+        public IActionResult UpdatedExpenseIsActive(long id, [FromBody] ExpenseViewModel expenseViewModel)
         {
             var expense = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -151,7 +151,7 @@ namespace OC.AccountingAPI.Controllers
         }
         // POST: api/Expenses
         [HttpPost]
-        public async Task<IActionResult> PostExpense([FromBody] Expense expense)
+        public async Task<IActionResult> PostExpense([FromBody] ExpenseViewModel expense)
         {
             if (!ModelState.IsValid)
             {

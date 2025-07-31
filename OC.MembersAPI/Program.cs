@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OC.Data;
+using OC.Data.Repositories.Interfaces;
+using OC.Data.Repositories;
 using OC.Data.UnitOfWork;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models;
@@ -54,12 +56,8 @@ builder.Services.AddSingleton<EmailConfiguration>(emailConfiguration);
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 
-builder.Services.AddScoped<IUnitOfWork<EducationLevel>, UnitOfWork<EducationLevel>>();
-builder.Services.AddScoped<IUnitOfWork<Family>, UnitOfWork<Family>>();
-builder.Services.AddScoped<IUnitOfWork<LeadershipRole>, UnitOfWork<LeadershipRole>>();
-builder.Services.AddScoped<IUnitOfWork<Member>, UnitOfWork<Member>>();
-builder.Services.AddScoped<IUnitOfWork<MemberTransaction>, UnitOfWork<MemberTransaction>>();
-builder.Services.AddScoped<IUnitOfWork<TransactionType>, UnitOfWork<TransactionType>>();
+builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+builder.Services.AddScoped(typeof(IReadOnlyProjectionRepository<,>), typeof(ReadOnlyProjectionRepository<,>));
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Add AutoMapper

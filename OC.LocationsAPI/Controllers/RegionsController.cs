@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Locations;
+using OC.Domain.ViewModels.Locations;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.LocationsAPI.Controllers
@@ -27,26 +27,26 @@ namespace OC.LocationsAPI.Controllers
         /// Get all regions
         /// </summary>
         /// <returns>List of regions</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Region>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetRegions()
         {
             var allRegions = _unitOfWork.Entity.GetAll();
-            return Ok(allRegions);
+            return Ok(_mapper.Map<IEnumerable<RegionViewModel>>(allRegions));
         }
 
         /// <summary>
         /// Get all regions
         /// </summary>
         /// <returns>List of regions</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Region>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeregions")]
         public IActionResult GetActiveRegions()
         {
             var allRegions = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allRegions);
+            return Ok(_mapper.Map<IEnumerable<RegionViewModel>>(allRegions));
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace OC.LocationsAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>region == entered Id</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Region>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetRegion([FromRoute] long id)
@@ -71,12 +71,12 @@ namespace OC.LocationsAPI.Controllers
                 throw new NotFoundException($"Region Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Region>(region));
+            return Ok(_mapper.Map<RegionViewModel>(region));
         }
 
         // PUT: api/Regions/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegion([FromRoute] long id, [FromBody] Region region)
+        public async Task<IActionResult> PutRegion([FromRoute] long id, [FromBody] RegionViewModel region)
         {
             if (!ModelState.IsValid)
             {
@@ -101,6 +101,7 @@ namespace OC.LocationsAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_region);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -126,7 +127,7 @@ namespace OC.LocationsAPI.Controllers
         /// <param name="regionViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedRegionIsActive(long id, [FromBody] Region regionViewModel)
+        public IActionResult UpdatedRegionIsActive(long id, [FromBody] RegionViewModel regionViewModel)
         {
             var region = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -143,7 +144,7 @@ namespace OC.LocationsAPI.Controllers
         }
         // POST: api/Regions
         [HttpPost]
-        public async Task<IActionResult> PostRegion([FromBody] Region region)
+        public async Task<IActionResult> PostRegion([FromBody] RegionViewModel region)
         {
             if (!ModelState.IsValid)
             {
@@ -151,7 +152,7 @@ namespace OC.LocationsAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newRegion = region;
+            var newRegion = _mapper.Map<Region>(region);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.RegionExists(region.Id))
                 throw new BadRequestException("This region exists!!");
@@ -177,8 +178,8 @@ namespace OC.LocationsAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(region);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(region);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(region);
         }

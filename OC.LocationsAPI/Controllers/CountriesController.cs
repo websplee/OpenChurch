@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Locations;
 using OC.Domain.ViewModels.Locations;
 using System.Data.Entity.Infrastructure;
-using System.Linq;
 
 namespace OC.LocationsAPI.Controllers
 {
@@ -42,7 +40,7 @@ namespace OC.LocationsAPI.Controllers
         /// Get all countries
         /// </summary>
         /// <returns>List of countries</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Country>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CountryViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activecountries")]
         public IActionResult GetActiveCountries()
@@ -56,7 +54,7 @@ namespace OC.LocationsAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Country == entered Id</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Country>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CountryViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetCountry([FromRoute] long id)
@@ -78,7 +76,7 @@ namespace OC.LocationsAPI.Controllers
 
         // PUT: api/Countries/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry([FromRoute] long id, [FromBody] Country country)
+        public async Task<IActionResult> PutCountry([FromRoute] long id, [FromBody] CountryViewModel country)
         {
             if (!ModelState.IsValid)
             {
@@ -104,6 +102,7 @@ namespace OC.LocationsAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_country);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -129,7 +128,7 @@ namespace OC.LocationsAPI.Controllers
         /// <param name="countryViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedCountryIsActive(long id, [FromBody] Country countryViewModel)
+        public IActionResult UpdatedCountryIsActive(long id, [FromBody] CountryViewModel countryViewModel)
         {
             var country = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -146,7 +145,7 @@ namespace OC.LocationsAPI.Controllers
         }
         // POST: api/Countries
         [HttpPost]
-        public async Task<IActionResult> PostCountry([FromBody] Country country)
+        public async Task<IActionResult> PostCountry([FromBody] CountryViewModel country)
         {
             if (!ModelState.IsValid)
             {
@@ -154,7 +153,7 @@ namespace OC.LocationsAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newCountry = country;
+            var newCountry = _mapper.Map<Country>(country);
             // ADD OTHER DEFAULT VALUES HERE
             newCountry.Continent = null;
 
@@ -182,8 +181,8 @@ namespace OC.LocationsAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(country);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(country);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(country);
         }

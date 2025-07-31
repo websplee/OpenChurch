@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Members;
@@ -91,6 +90,7 @@ namespace OC.MembersAPI.Controllers
             
             try
             {
+                _unitOfWork.Entity.Update(_member);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -113,17 +113,17 @@ namespace OC.MembersAPI.Controllers
         /// Update user
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="memberViewModel"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedMemberIsActive(long id, [FromBody] MemberViewModel memberViewModel)
+        public IActionResult UpdatedMemberIsActive(long id, bool isActive = false)
         {
             var member = _unitOfWork.Entity.GetSingle(x => x.Id == id, m => m.Branch, m => m.CellGroup, m => m.Spouse, m => m.Family, m => m.User, m => m.BranchMinistryLeaderships, m => m.Pledges).First();
 
             if (member == null)
                 throw new NotFoundException("Member not found");
 
-            member.IsActive = memberViewModel.IsActive;
+            member.IsActive = isActive;
 
             // save 
             _unitOfWork.Entity.Update(member);
@@ -131,9 +131,15 @@ namespace OC.MembersAPI.Controllers
 
             return CreatedAtAction("UserDeactivated", new { id = member.Id }, member);
         }
-        // POST: api/Members
+
+
+        /// <summary>
+        /// Create a new member
+        /// </summary>
+        /// <param name="member"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostMember([FromBody] MemberViewModel member)
+        public async Task<IActionResult> PostMember([FromBody] MemberNewViewModel member)
         {
             if (!ModelState.IsValid)
             {
@@ -142,9 +148,6 @@ namespace OC.MembersAPI.Controllers
 
             // Create the entity based on the View Model
             var newMember = _mapper.Map<Member>(member);
-            // ADD OTHER DEFAULT VALUES HERE
-            if (this.MemberExists(member.Id))
-                throw new BadRequestException("This member exists!!");
 
             _unitOfWork.Entity.Add(newMember);
             await _unitOfWork.SaveChangesAsync();
@@ -152,7 +155,11 @@ namespace OC.MembersAPI.Controllers
             return CreatedAtAction("GetMember", new { id = newMember.Id }, newMember);
         }
 
-        // DELETE: api/Members/5
+        /// <summary>
+        /// Delete a member by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMember([FromRoute] long id)
         {
@@ -167,8 +174,8 @@ namespace OC.MembersAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(member);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(member);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(member);
         }

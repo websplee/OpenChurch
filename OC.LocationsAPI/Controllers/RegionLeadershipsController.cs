@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Locations;
+using OC.Domain.ViewModels.Locations;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.LocationsAPI.Controllers
@@ -27,26 +28,26 @@ namespace OC.LocationsAPI.Controllers
         /// Get all region leaderships
         /// </summary>
         /// <returns>List of region leaderships</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetRegionLeaderships()
         {
             var allRegionLeaderships = _unitOfWork.Entity.GetAll();
-            return Ok(allRegionLeaderships);
+            return Ok(_mapper.Map<IEnumerable<RegionLeadershipViewModel>>(allRegionLeaderships));
         }
 
         /// <summary>
         /// Get all regionleaderships
         /// </summary>
         /// <returns>List of region leaderships</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeregionLeaderships")]
         public IActionResult GetActiveRegionLeaderships()
         {
             var allRegionLeaderships = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allRegionLeaderships);
+            return Ok(_mapper.Map<IEnumerable<RegionLeadershipViewModel>>(allRegionLeaderships));
         }
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace OC.LocationsAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns>Region Leadership == entered Id</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<RegionLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetRegionLeadershipById([FromRoute] long id)
@@ -101,7 +102,7 @@ namespace OC.LocationsAPI.Controllers
 
         // PUT: api/RegionLeaderships/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRegionLeadership([FromRoute] long id, [FromBody] RegionLeadership regionLeadership)
+        public async Task<IActionResult> PutRegionLeadership([FromRoute] long id, [FromBody] RegionLeadershipViewModel regionLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -128,6 +129,7 @@ namespace OC.LocationsAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_regionLeadership);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -142,7 +144,7 @@ namespace OC.LocationsAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("RegionLeadershipsUpdate", new { id = _regionLeadership.Id }, _regionLeadership);
+            return CreatedAtAction("RegionLeadershipsUpdate", new { id = _regionLeadership.Id }, _mapper.Map<RegionLeadershipViewModel>(_regionLeadership));
         }
 
 
@@ -153,7 +155,7 @@ namespace OC.LocationsAPI.Controllers
         /// <param name="regionLeadershipViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedRegionLeadershipIsActive(long id, [FromBody] RegionLeadership regionLeadershipViewModel)
+        public IActionResult UpdatedRegionLeadershipIsActive(long id, [FromBody] RegionLeadershipViewModel regionLeadershipViewModel)
         {
             var regionLeadership = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -166,11 +168,11 @@ namespace OC.LocationsAPI.Controllers
             _unitOfWork.Entity.Update(regionLeadership);
             _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtAction("UserDeactivated", new { id = regionLeadership.Id }, regionLeadership);
+            return CreatedAtAction("UserDeactivated", new { id = regionLeadership.Id }, _mapper.Map<RegionLeadershipViewModel>(regionLeadership));
         }
         // POST: api/RegionLeaderships
         [HttpPost]
-        public async Task<IActionResult> PostRegionLeadership([FromBody] RegionLeadership regionLeadership)
+        public async Task<IActionResult> PostRegionLeadership([FromBody] RegionLeadershipViewModel regionLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -178,7 +180,7 @@ namespace OC.LocationsAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newRegionLeadership = regionLeadership;
+            var newRegionLeadership = _mapper.Map<RegionLeadership>(regionLeadership);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.RegionLeadershipExists(regionLeadership.Id))
                 throw new BadRequestException("This regionLeadership exists!!");

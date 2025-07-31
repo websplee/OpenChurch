@@ -9,12 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using OC.Data;
+using OC.Data.Repositories.Interfaces;
+using OC.Data.Repositories;
 using OC.Data.UnitOfWork;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models;
 using OC.Domain.Models.Branches;
-using OC.Domain.Models.Locations;
-using OC.Domain.Models.Users;
 using OC.Domain.ViewModels;
 using System.Text;
 
@@ -56,21 +56,9 @@ builder.Services.AddSingleton<EmailConfiguration>(emailConfiguration);
 
 builder.Services.AddTransient<IEmailService, EmailService>();
 
-builder.Services.AddScoped<IUnitOfWork<Branch>, UnitOfWork<Branch>>();
-builder.Services.AddScoped<IUnitOfWork<BranchLeadership>, UnitOfWork<BranchLeadership>>();
-builder.Services.AddScoped<IUnitOfWork<BranchMinistryLeadership>, UnitOfWork<BranchMinistryLeadership>>();
-builder.Services.AddScoped<IUnitOfWork<BranchStaff>, UnitOfWork<BranchStaff>>();
-builder.Services.AddScoped<IUnitOfWork<BranchStaffResignation>, UnitOfWork<BranchStaffResignation>>();
-builder.Services.AddScoped<IUnitOfWork<CellGroup>, UnitOfWork<CellGroup>>();
-builder.Services.AddScoped<IUnitOfWork<CellGroupHosts>, UnitOfWork<CellGroupHosts>>();
-builder.Services.AddScoped<IUnitOfWork<CellLeadership>, UnitOfWork<CellLeadership>>();
-builder.Services.AddScoped<IUnitOfWork<ChurchProgram>, UnitOfWork<ChurchProgram>>();
-builder.Services.AddScoped<IUnitOfWork<ChurchProgramSession>, UnitOfWork<ChurchProgramSession>>();
-builder.Services.AddScoped<IUnitOfWork<ChurchProgramSessionAttendance>, UnitOfWork<ChurchProgramSessionAttendance>>();
-builder.Services.AddScoped<IUnitOfWork<ChurchProgramSessionVisitor>, UnitOfWork<ChurchProgramSessionVisitor>>();
-builder.Services.AddScoped<IUnitOfWork<IncomingTransfer>, UnitOfWork<IncomingTransfer>>();
-builder.Services.AddScoped<IUnitOfWork<Ministry>, UnitOfWork<Ministry>>();
-builder.Services.AddScoped<IUnitOfWork<OutgoingTransfer>, UnitOfWork<OutgoingTransfer>>();
+builder.Services.AddScoped(typeof(IUnitOfWork<>), typeof(UnitOfWork<>));
+builder.Services.AddScoped(typeof(IReadOnlyProjectionRepository<,>), typeof(ReadOnlyProjectionRepository<,>));
+
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Add AutoMapper

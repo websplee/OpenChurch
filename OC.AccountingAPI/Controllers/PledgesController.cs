@@ -14,10 +14,10 @@ namespace OC.AccountingAPI.Controllers
     public class PledgesController : ControllerBase
     {
         private readonly ILogger _logger;
-        private IUnitOfWork<Pledge> _unitOfWork;
+        private IUnitOfWork<PledgeViewModel> _unitOfWork;
         private readonly IMapper _mapper;
 
-        public PledgesController(IMapper mapper, IUnitOfWork<Pledge> unitOfWork, ILogger<PledgesController> logger)
+        public PledgesController(IMapper mapper, IUnitOfWork<PledgeViewModel> unitOfWork, ILogger<PledgesController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -28,7 +28,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all pledge
         /// </summary>
         /// <returns>List of pledge</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Pledge>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PledgeViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetPledges()
@@ -41,7 +41,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all pledge
         /// </summary>
         /// <returns>List of pledge</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Pledge>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PledgeViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activepledges")]
         public IActionResult GetActivePledges()
@@ -54,7 +54,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get pledge by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Pledge>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<PledgeViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetPledge([FromRoute] long id)
@@ -71,12 +71,12 @@ namespace OC.AccountingAPI.Controllers
                 throw new NotFoundException($"Pledge Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Pledge>(pledge));
+            return Ok(_mapper.Map<PledgeViewModel>(pledge));
         }
 
         // PUT: api/Pledge/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPledge([FromRoute] long id, [FromBody] Pledge pledge)
+        public async Task<IActionResult> PutPledge([FromRoute] long id, [FromBody] PledgeViewModel pledge)
         {
             if (!ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace OC.AccountingAPI.Controllers
         /// <param name="pledgeViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedPledgeIsActive(long id, [FromBody] Pledge pledgeViewModel)
+        public IActionResult UpdatedPledgeIsActive(long id, [FromBody] PledgeViewModel pledgeViewModel)
         {
             var pledge = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -149,7 +149,7 @@ namespace OC.AccountingAPI.Controllers
         }
         // POST: api/Pledges
         [HttpPost]
-        public async Task<IActionResult> PostPledge([FromBody] Pledge pledge)
+        public async Task<IActionResult> PostPledge([FromBody] PledgeViewModel pledge)
         {
             if (!ModelState.IsValid)
             {

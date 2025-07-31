@@ -1,11 +1,6 @@
 ﻿using OC.Domain.Interfaces;
 using OC.Domain.Models.Branches;
 using OC.Domain.Models.Members;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OC.Domain.Models.Accounting
 {

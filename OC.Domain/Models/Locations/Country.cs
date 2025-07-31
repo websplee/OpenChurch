@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
-using OC.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using OC.Domain.Interfaces;
 
 namespace OC.Domain.Models.Locations
 {

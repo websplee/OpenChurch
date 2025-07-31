@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchLeadershipsAPI.Controllers
@@ -27,33 +28,33 @@ namespace OC.BranchLeadershipsAPI.Controllers
         /// Get all branchLeadership
         /// </summary>
         /// <returns>List of branchLeadership</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetBranchLeaderships()
         {
             var allBranchLeaderships = _unitOfWork.Entity.AllIncluding(b => b.Branch, b => b.Member, b => b.LeadershipRole);
-            return Ok(allBranchLeaderships);
+            return Ok(_mapper.Map<IEnumerable<BranchLeadershipViewModel>>(allBranchLeaderships));
         }
 
         /// <summary>
         /// Get all branchLeadership
         /// </summary>
         /// <returns>List of branchLeadership</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activebranchLeaderships")]
         public IActionResult GetActiveBranchLeaderships()
         {
             var allBranchLeaderships = _unitOfWork.Entity.AllIncluding(b => b.Branch, b => b.Member, b => b.LeadershipRole).Where(m => m.IsActive == true);
-            return Ok(allBranchLeaderships);
+            return Ok(_mapper.Map<IEnumerable<BranchLeadershipViewModel>>(allBranchLeaderships));
         }
 
         /// <summary>
         /// Get branchLeadership by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetBranchLeadership([FromRoute] long id)
@@ -70,12 +71,12 @@ namespace OC.BranchLeadershipsAPI.Controllers
                 throw new NotFoundException($"BranchLeadership Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<BranchLeadership>(branchLeadership));
+            return Ok(_mapper.Map<BranchLeadershipViewModel>(branchLeadership));
         }
 
         // PUT: api/BranchLeadership/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBranchLeadership([FromRoute] long id, [FromBody] BranchLeadership branchLeadership)
+        public async Task<IActionResult> PutBranchLeadership([FromRoute] long id, [FromBody] BranchLeadershipViewModel branchLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -102,6 +103,7 @@ namespace OC.BranchLeadershipsAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_branchLeadership);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -127,7 +129,7 @@ namespace OC.BranchLeadershipsAPI.Controllers
         /// <param name="branchLeadershipViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedBranchLeadershipIsActive(long id, [FromBody] BranchLeadership branchLeadershipViewModel)
+        public IActionResult UpdatedBranchLeadershipIsActive(long id, [FromBody] BranchLeadershipViewModel branchLeadershipViewModel)
         {
             var branchLeadership = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -144,7 +146,7 @@ namespace OC.BranchLeadershipsAPI.Controllers
         }
         // POST: api/BranchLeaderships
         [HttpPost]
-        public async Task<IActionResult> PostBranchLeadership([FromBody] BranchLeadership branchLeadership)
+        public async Task<IActionResult> PostBranchLeadership([FromBody] BranchLeadershipViewModel branchLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +154,7 @@ namespace OC.BranchLeadershipsAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newBranchLeadership = branchLeadership;
+            var newBranchLeadership = _mapper.Map<BranchLeadership>(branchLeadership);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.BranchLeadershipExists(branchLeadership.Id))
                 throw new BadRequestException("This branchLeadership exists!!");
@@ -178,8 +180,8 @@ namespace OC.BranchLeadershipsAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(branchLeadership);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(branchLeadership);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(branchLeadership);
         }

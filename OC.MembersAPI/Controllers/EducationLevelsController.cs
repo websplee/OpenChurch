@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Members;
+using OC.Domain.ViewModels.Members;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.MembersAPI.Controllers
@@ -27,7 +28,7 @@ namespace OC.MembersAPI.Controllers
         /// Get all educationLevel
         /// </summary>
         /// <returns>List of educationLevel</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevel>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevelViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetEducationLevels()
@@ -40,7 +41,7 @@ namespace OC.MembersAPI.Controllers
         /// Get all educationLevel
         /// </summary>
         /// <returns>List of educationLevel</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevel>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevelViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeeducationLevels")]
         public IActionResult GetActiveEducationLevels()
@@ -53,7 +54,7 @@ namespace OC.MembersAPI.Controllers
         /// Get educationLevel by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevel>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<EducationLevelViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetEducationLevel([FromRoute] long id)
@@ -70,12 +71,17 @@ namespace OC.MembersAPI.Controllers
                 throw new NotFoundException($"EducationLevel Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<EducationLevel>(educationLevel));
+            return Ok(_mapper.Map<EducationLevelViewModel>(educationLevel));
         }
 
-        // PUT: api/EducationLevel/5
+        /// <summary>
+        /// Update educationLevel by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="educationLevel"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEducationLevel([FromRoute] long id, [FromBody] EducationLevel educationLevel)
+        public async Task<IActionResult> PutEducationLevel([FromRoute] long id, [FromBody] EducationLevelViewModel educationLevel)
         {
             if (!ModelState.IsValid)
             {
@@ -100,6 +106,7 @@ namespace OC.MembersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_educationLevel);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -125,14 +132,14 @@ namespace OC.MembersAPI.Controllers
         /// <param name="educationLevelViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedEducationLevelIsActive(long id, [FromBody] EducationLevel educationLevelViewModel)
+        public IActionResult UpdatedEducationLevelIsActive(long id, bool isActive = false)
         {
             var educationLevel = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
             if (educationLevel == null)
                 throw new NotFoundException("EducationLevel not found");
 
-            educationLevel.IsActive = educationLevelViewModel.IsActive;
+            educationLevel.IsActive = isActive;
 
             // save 
             _unitOfWork.Entity.Update(educationLevel);
@@ -140,9 +147,16 @@ namespace OC.MembersAPI.Controllers
 
             return CreatedAtAction("UserDeactivated", new { id = educationLevel.Id }, educationLevel);
         }
-        // POST: api/EducationLevels
+
+
+        /// <summary>
+        /// Create a new educationLevel
+        /// </summary>
+        /// <param name="educationLevel"></param>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
         [HttpPost]
-        public async Task<IActionResult> PostEducationLevel([FromBody] EducationLevel educationLevel)
+        public async Task<IActionResult> PostEducationLevel([FromBody] EducationLevelViewModel educationLevel)
         {
             if (!ModelState.IsValid)
             {
@@ -150,7 +164,7 @@ namespace OC.MembersAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newEducationLevel = educationLevel;
+            var newEducationLevel = _mapper.Map<EducationLevel>(educationLevel);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.EducationLevelExists(educationLevel.Id))
                 throw new BadRequestException("This educationLevel exists!!");
@@ -161,7 +175,11 @@ namespace OC.MembersAPI.Controllers
             return CreatedAtAction("GetEducationLevel", new { id = newEducationLevel.Id }, newEducationLevel);
         }
 
-        // DELETE: api/EducationLevels/5
+        /// <summary>
+        /// Delete educationLevel by Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEducationLevel([FromRoute] long id)
         {
@@ -176,8 +194,8 @@ namespace OC.MembersAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(educationLevel);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(educationLevel);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(educationLevel);
         }

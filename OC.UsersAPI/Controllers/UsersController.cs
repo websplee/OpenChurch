@@ -135,6 +135,7 @@ namespace OC.UsersAPI.Controllers
             var user = _mapper.Map<User>(model);
 
             user.IsActive = true;
+            
             IdentityResult? result = null;
 
             if (model.Password == null) // If no password is supplied
@@ -164,31 +165,65 @@ namespace OC.UsersAPI.Controllers
                 }
 
             // Upload user image and update the user PictureUrl
-            user.PictureUrl = user.PictureUrl != "" ? await UploadConvertBase64ImageToFileImage(user, "profile") : "";
+            user.PictureUrl = !user.PictureUrl.IsNullOrEmpty() ? await UploadConvertBase64ImageToFileImage(user, "profile") : "";
 
             // Update the user
             await _userManager.UpdateAsync(user);
 
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // Convert to base64 
+            token = Base64UrlEncoder.Encode(token);
+
             // var confirmationLink = Url.Action(nameof(ConfirmEmail), "Users", new { token, email = user.Email }, Request.Scheme);
-            // var confirmationLink = Url.Action("auth", "activate-email", new { token, email = user.Email }, Request.Scheme);           
-            var basePath = _configuration["EmailConfiguration:BaseUrl"] + _configuration["EmailConfiguration:EmailConfirmationUrl"];
+            // var confirmationLink = Url.Action("auth", "activate-email", new { token, email = user.Email }, Request.Scheme);
+            // 
+
+
+            var basePath = $"{_configuration["EmailConfiguration:BaseUrl"]}{_configuration["EmailConfiguration:ActivateEmailUrl"]}";
 
             string activationUrl = $"{basePath}?token={token}&email={user.Email}";
 
-            string content = $"<h3>Your account with this user name has been successfully created.</h3> {model.Email} " +
-                $"<p><em>DO NOT SHARE THESE CREDENTIALS WITH ANYONE.</em>" +
-                $"<p>Kindly click on this link to activate your email account within 2 hours</p>" +
-                $"<a href=\"{activationUrl}\" style=\"background-color: #007BFF; color: #fff; padding: 10px 20px; text-decoration: none; border-radius: 5px;\">Case Details</a>" +
-                $"<p>Remember you will not be able to access your account until you activate it.</p>";
+            // string content = System.IO.File.ReadAllText("EmailTemplates/PasswordReset.htm");
+            string content = System.IO.File.ReadAllText("EmailTemplates/index.html");
 
-            var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "RIMSMailer", Address = "credentials@mcdss.gov.zm" } },
+            // Replace #Username
+            content = content.Replace("#Username", $"{user.Fullname}");
+
+            // Replace #Action
+            content = content.Replace("#Action", "your account has been successfully created!");
+
+            // Replace #Content1
+            var content1 = "We're excited to have you get started on the Open Church platform. Your account has been successfully created. Kindly activate your account by clicking the button below..";
+            content = content.Replace("#Content1", content1);
+
+            // Replace #ButtonText
+            var buttonText = "Activate Account";
+            content = content.Replace("#ButtonText", buttonText);
+
+            // Replace #ButtonLink
+            var buttonLink = activationUrl;
+            content = content.Replace("#ButtonLink", buttonLink);
+
+            // Replace #Content2
+            var content2 = "DO NOT SHARE THIS EMAIL WITH ANYONE!!";
+            content = content.Replace("#Content2", content2);
+
+            // Replace #Content3
+            var content3 = "";
+            content = content.Replace("#Content3", content3);
+
+
+            var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "OSMailer", Address = _configuration["EmailConfiguration:FromAddress"] } },
                 new List<EmailAddress>() { new EmailAddress() { Name = user.Email, Address = user.Email } },
-                "New Credentials", content);
+                "Successful Account Creation - Activate Your Account", content);
 
-            _emailService.Send(mail); // This process can take some time so sometimes no need to await
 
-            return CreatedAtAction("Register", new { id = user.Id }, await GetById(user.Id));
+            await _emailService.Send(mail);
+
+            var userViewModel = await AttachRolesToUser(user);
+
+            return CreatedAtAction("Register", new { id = user.Id }, userViewModel);
         }
 
         /// <summary>
@@ -208,7 +243,7 @@ namespace OC.UsersAPI.Controllers
             if (user == null)
                 BadRequest("Email did not bring up an valid account");
 
-            var resetPassResult = await _userManager.ResetPasswordAsync(user, resetPasswordModel.Token, resetPasswordModel.Password);
+            var resetPassResult = await _userManager.ResetPasswordAsync(user, Base64UrlEncoder.Decode(resetPasswordModel.Token), resetPasswordModel.Password);
 
             if (!resetPassResult.Succeeded)
             {
@@ -242,14 +277,48 @@ namespace OC.UsersAPI.Controllers
                 return BadRequest("Email not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            var callback = Url.Action(nameof(ResetPassword), "Users", new { token, email = user.Email }, Request.Scheme);
 
-            string content = "Your username is: " + user.Email + ". Your password reset token is " + callback;
-            content += "\n\n If you did not initiate for this password reset, kindly engage your systems administrator. Token is " + token;
+            // Encode token
+            token = Base64UrlEncoder.Encode(token);
 
-            var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "RIMSMailer", Address = "appmailer@crystalisedapps.com" } },
+            var basePath = $"{_configuration["EmailConfiguration:BaseUrl"]}{_configuration["EmailConfiguration:PasswordResetUrl"]}";
+
+            string activationUrl = $"{basePath}?token={token}&email={user.Email}";
+
+            // string content = System.IO.File.ReadAllText("EmailTemplates/PasswordReset.htm");
+            string content = System.IO.File.ReadAllText("EmailTemplates/index.html");
+
+            // Replace #Username
+            content = content.Replace("#Username", $"{user.Fullname}");
+
+            // Replace #Action
+            content = content.Replace("#Action", "your password has been reset");
+
+            // Replace #Content1
+            var content1 = "You are receiving this email because you initiated a password reset on the RIMS platform. If you are the one who initiated this reset, proceed by clicking the button below..";
+            content = content.Replace("#Content1", content1);
+
+            // Replace #ButtonText
+            var buttonText = "Password Reset";
+            content = content.Replace("#ButtonText", buttonText);
+
+            // Replace #ButtonLink
+            var buttonLink = activationUrl;
+            content = content.Replace("#ButtonLink", buttonLink);
+
+            // Replace #Content2
+            var content2 = "DO NOT SHARE THIS EMAIL WITH ANYONE!!";
+            content = content.Replace("#Content2", content2);
+
+            // Replace #Content3
+            var content3 = "";
+            content = content.Replace("#Content3", content3);
+
+
+            var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "OSMailer", Address = _configuration["EmailConfiguration:FromAddress"] } },
                 new List<EmailAddress>() { new EmailAddress() { Name = user.Email, Address = user.Email } },
-                "New Credentials", content);
+                "Password Reset", content);
+
 
             await _emailService.Send(mail);
 
@@ -259,8 +328,7 @@ namespace OC.UsersAPI.Controllers
         /// <summary>
         /// Confirm the user email
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="email"></param>
+        /// <param name="emailConfirmation"></param>
         /// <returns></returns>
         [HttpPost("confirmemail")]
         [AllowAnonymous]
@@ -270,28 +338,151 @@ namespace OC.UsersAPI.Controllers
             if (user == null)
                 return BadRequest("Invalid user email");
 
-            var result = await _userManager.ConfirmEmailAsync(user, emailConfirmation.Token);
+            // Check if the password is set
+            var isPasswordNotSet = user.PasswordHash.IsNullOrEmpty();
 
-            var x = result;
+            var result = await _userManager.ConfirmEmailAsync(user, Base64UrlEncoder.Decode(emailConfirmation.Token));
+
 
             if (result.Succeeded)
             {
-                // Set the password
+                user.IsFirstLogin = false;
 
-                string content = "<h3>Thank you for taking time to validate your account.<h3> " +
-                    "<p>Your account has been successfully activated and you may now proceed to login.</p>";
+                // save 
+                await _userManager.UpdateAsync(user);
 
-                var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "User Credentials", Address = "credentials@mcdss.gov.zm" } },
+                // If the password is not set we need to exit and return the password setting token and the user Id
+                if (isPasswordNotSet)
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Encode token
+                    token = Base64UrlEncoder.Encode(token);
+
+                    return Ok(new { UserId = user.Id, IsFirstLogin = user.IsFirstLogin, Token = token });
+
+                }
+
+                var basePath = $"{_configuration["EmailConfiguration:BaseUrl"]}";
+
+                // string content = System.IO.File.ReadAllText("EmailTemplates/PasswordReset.htm");
+                string content = System.IO.File.ReadAllText("EmailTemplates/index.html");
+
+                // Replace #Username
+                content = content.Replace("#Username", $"{user.Fullname}");
+
+                // Replace #Action
+                content = content.Replace("#Action", "your account has been successfully activated!");
+
+                // Replace #Content1
+                var content1 = "Thank you for taking time to activate you account. You may now proceed to access the system by clicking the link below.";
+                content = content.Replace("#Content1", content1);
+
+                // Replace #ButtonText
+                var buttonText = "System Link";
+                content = content.Replace("#ButtonText", buttonText);
+
+                // Replace #ButtonLink
+                var buttonLink = basePath;
+                content = content.Replace("#ButtonLink", buttonLink);
+
+                // Replace #Content2
+                var content2 = "DO NOT SHARE THIS EMAIL WITH ANYONE!!";
+                content = content.Replace("#Content2", content2);
+
+                // Replace #Content3
+                var content3 = "";
+                content = content.Replace("#Content3", content3);
+
+                var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "OSMailer", Address = _configuration["EmailConfiguration:FromAddress"] } },
                     new List<EmailAddress>() { new EmailAddress() { Name = user.Email, Address = user.Email } },
-                    "Email Confirmed", content);
+                    "Account Successfully Activated", content);
 
-                _emailService.Send(mail);
+                await _emailService.Send(mail);
 
-                return Ok(new { UserId = user.Id, IsFirstLogin = user.IsFirstLogin });
+                return Ok(new { UserId = user.Id, IsFirstLogin = user.IsFirstLogin, Token = string.Empty });
             }
 
             else
                 return BadRequest("Failed to confirm email. Please try again later. " + result.ToString());
+        }
+
+        /// <summary>
+        /// This link is used to resend the email activation link
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns></returns>
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [HttpPost("resendActivationEmail")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResendActivationEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                // Handle user not found
+                return Ok("If user exists, a reset email has been sent");
+            }
+
+            if (user.EmailConfirmed)
+            {
+                // User is already activated
+                return Ok("Confirmed. If user exists, a reset email has been sent");
+            }
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            // Convert to base64 
+            token = Base64UrlEncoder.Encode(token);
+
+            // var confirmationLink = Url.Action(nameof(ConfirmEmail), "Users", new { token, email = user.Email }, Request.Scheme);
+            // var confirmationLink = Url.Action("auth", "activate-email", new { token, email = user.Email }, Request.Scheme);
+            // 
+
+
+            var basePath = $"{_configuration["EmailConfiguration:BaseUrl"]}{_configuration["EmailConfiguration:ActivateEmailUrl"]}";
+
+            string activationUrl = $"{basePath}?token={token}&email={user.Email}";
+
+            // string content = System.IO.File.ReadAllText("EmailTemplates/PasswordReset.htm");
+            string content = System.IO.File.ReadAllText("EmailTemplates/index.html");
+
+            // Replace #Username
+            content = content.Replace("#Username", $"{user.Fullname}");
+
+            // Replace #Action
+            content = content.Replace("#Action", "your account has been successfully created!");
+
+            // Replace #Content1
+            var content1 = "We're excited to have you get started on the RIMS platform. Your account has been successfully created. Kindly activate your account by clicking the button below..";
+            content = content.Replace("#Content1", content1);
+
+            // Replace #ButtonText
+            var buttonText = "Activate Account";
+            content = content.Replace("#ButtonText", buttonText);
+
+            // Replace #ButtonLink
+            var buttonLink = activationUrl;
+            content = content.Replace("#ButtonLink", buttonLink);
+
+            // Replace #Content2
+            var content2 = "DO NOT SHARE THIS EMAIL WITH ANYONE!!";
+            content = content.Replace("#Content2", content2);
+
+            // Replace #Content3
+            var content3 = "";
+            content = content.Replace("#Content3", content3);
+
+
+            var mail = PrepareEmail(new List<EmailAddress>() { new EmailAddress() { Name = "OSMailer", Address = _configuration["EmailConfiguration:FromAddress"] } },
+                new List<EmailAddress>() { new EmailAddress() { Name = user.Email, Address = user.Email } },
+                "Account Reactivation Link - Activate Your Account", content);
+
+
+            await _emailService.Send(mail);
+
+            return Ok("If user exists, activation email resent successfully.");
         }
 
         /// <summary>
@@ -462,15 +653,20 @@ namespace OC.UsersAPI.Controllers
                 if (roleName.ToLower() == "all")
                     users = allUsers;
                 else
-                    foreach (var user in allUsers)
+                { /*foreach (var user in allUsers)
                     {
                         var userRoles = await _userManager.GetRolesAsync(user);
                         if (!userRoles.Contains("Applicant"))
                         {
                             users.Add(user);
                         }
-                    }
+                    }*/
+                    // get all applicants
+                    var applicantUsers = await _userManager.GetUsersInRoleAsync("Applicant");
 
+                    // users not applicants, assuming no applicant has another role
+                    users = allUsers.Except(applicantUsers).ToList();
+                }
             }
             else
                 users = await _userManager.GetUsersInRoleAsync(roleName);
@@ -479,13 +675,6 @@ namespace OC.UsersAPI.Controllers
 
             return Ok(usersWithRoles.OrderByDescending(u => u.SubmissionDate));
         }
-
-        /* public async Task<IActionResult> GetLeastBusyUserByRole([FromRoute] string roleName)
-         {
-             var usersInRole = await _userManager.GetUsersInRoleAsync(roleName);
-
-             var leastBusyUser = usersInRole.Any(u => u.WorkflowInstances.Where(w => w.IsPicked == true).Count >0 ).FirstOrDefault();
-         }*/
 
         /// <summary>
         /// Updates user given the userview values. Password is not updated from here.
@@ -539,27 +728,34 @@ namespace OC.UsersAPI.Controllers
         /// Change active status of user
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="UserViewModel"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(User))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPut("updateisactive/{id}")]
-        public async Task<IActionResult> UpdateUserIsActive(string id, [FromBody] UserViewModel UserViewModel)
+        [HttpPut("updateisactive/{isActive}/{id}")]
+        public async Task<IActionResult> UpdateUserIsActive(bool isActive, string id)
         {
             var user = await _userManager.FindByIdAsync(id);
 
             if (user == null)
                 return BadRequest($"User not found with this Id {id}");
 
-            user.IsActive = UserViewModel.IsActive;
+            user.IsActive = isActive;
 
 
             try
             {
                 // save 
                 await _userManager.UpdateAsync(user);
+                // Get the roles assigned to the user
+                var userRoles = await _userManager.GetRolesAsync(user);
 
-                return CreatedAtAction("Update", new { id = user.Id }, user);
+                // Create a new UserWithRoles object to store user details
+                var userWithRoles = _mapper.Map<UserViewModel>(user);
+
+                userWithRoles.Roles = userRoles;
+
+                return CreatedAtAction("Update", new { id = user.Id }, userWithRoles);
             }
             catch (Exception ex)
             {
@@ -593,7 +789,15 @@ namespace OC.UsersAPI.Controllers
                 // save 
                 await _userManager.UpdateAsync(user);
 
-                userViewModels.Add(_mapper.Map<UserViewModel>(user));
+                // Get the roles assigned to the user
+                var userRoles = await _userManager.GetRolesAsync(user);
+
+                // Create a new UserWithRoles object to store user details
+                var userWithRoles = _mapper.Map<UserViewModel>(user);
+
+                userWithRoles.Roles = userRoles;
+
+                userViewModels.Add(userWithRoles);
             }
             return CreatedAtAction("UpdateMultipleUsersIsActive", userViewModels);
 
@@ -719,45 +923,45 @@ namespace OC.UsersAPI.Controllers
         /// <summary>
         /// Delete user - Only SPECIAL ADMIN has this role
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<User>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Delete(User model)
+        [Authorize(Roles = "Admin, admin")]
+        public async Task<IActionResult> Delete(string id)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
-            // await _userManager.Users.Del();
-            return Ok(user);
-        }
+            var user = await _userManager.FindByIdAsync(id);
 
-        /// <summary>
-        /// Reset password by user Id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="UserViewModel"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("[action]/{id}")]
-        public async Task<IActionResult> ResetPasswordByUserId(long id, [FromBody] UserResetPasswordViewModel UserViewModel)
-        {
-            throw new NotImplementedException();
-        }
+            if (user == null)
+            {
+                return NotFound($"User with ID = {user.Id} cannot be found");
+            }
+            else
+            {
+                // Remove all roles associated with the user
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count > 0)
+                {
+                    await _userManager.RemoveFromRolesAsync(user, roles);
+                }
 
-        /// <summary>
-        /// Reset password of currently logged user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="UserViewModel"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("[action]/{id}")]
-        public async Task<IActionResult> ResetPasswordByCurrentUserId(long id, [FromBody] UserResetPasswordViewModel UserViewModel)
-        {
-            throw new NotImplementedException();
+                // Delete the user
+                var result = await _userManager.DeleteAsync(user);
+                if (result.Succeeded)
+                {
+                    return Ok($"User {user.UserName} has been successfully deleted."); // or wherever you want to redirect
+                }
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return BadRequest(ModelState); ; // return to the view with error messages
+                }
+            }
         }
-
 
         // Prepare email message
         private EmailMessage PrepareEmail(List<EmailAddress> fromAddresses, List<EmailAddress> toAddresses,
@@ -810,16 +1014,6 @@ namespace OC.UsersAPI.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Role, role.ToLower()));
 
             return identity;
-        }
-
-        // Generate role name based on moduleName underscore user role
-        private string GenerateCustomRoleName(string moduleName, string roleName)
-        {
-            // clean the strings
-            moduleName = String.Concat(moduleName.Where(c => !Char.IsWhiteSpace(c))).ToLower();
-            roleName = String.Concat(roleName.Where(c => !Char.IsWhiteSpace(c))).ToLower();
-
-            return String.Concat(moduleName, '_', roleName);
         }
 
         /// <summary>

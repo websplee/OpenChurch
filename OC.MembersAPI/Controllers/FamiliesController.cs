@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
-using OC.Domain.Models.Branches;
 using OC.Domain.Models.Members;
+using OC.Domain.ViewModels.Locations;
+using OC.Domain.ViewModels.Members;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace OC.MembersAPI.Controllers
 {
@@ -27,56 +30,86 @@ namespace OC.MembersAPI.Controllers
         /// <summary>
         /// Get all family
         /// </summary>
+        /// /// <param name="filter"></param>
         /// <returns>List of family</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Family>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FamilyViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
-        public IActionResult GetFamilies()
+        public IActionResult GetFamilies([FromQuery] LocationFilterViewModel? filter)
         {
-            var allFamilies = _unitOfWork.Entity.GetAll();
+            var query = _unitOfWork.Entity.AllIncludingQueryable(f => f.Administrator, f => f.Members);
+
+            // Apply filters
+            if (filter.BranchId.HasValue)
+                query = query.Where(x => x.Administrator.BranchId == filter.BranchId);
+
+            // Convert to view model
+            var allFamilies = query.Select(f => _mapper.Map<FamilyViewModel>(f)).ToList();
+
             return Ok(allFamilies);
         }
 
         /// <summary>
         /// Get all family
         /// </summary>
+        /// /// /// <param name="filter"></param>
         /// <returns>List of family</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Family>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FamilyViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activefamilys")]
-        public IActionResult GetActiveFamilies()
+        public IActionResult GetActiveFamilies([FromQuery] LocationFilterViewModel? filter)
         {
-            var allFamilies = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
+            var query = _unitOfWork.Entity.AllIncludingQueryable(f => f.Administrator, f => f.Members)
+                .Where(f => f.IsActive == true);
+
+            // Apply filters
+            if (filter.BranchId.HasValue)
+                query = query.Where(x => x.Administrator.BranchId == filter.BranchId);
+
+            // Convert to view model
+            var allFamilies = query.Select(f => _mapper.Map<FamilyViewModel>(f)).ToList();
+
             return Ok(allFamilies);
         }
 
         /// <summary>
         /// Get family by Id
         /// </summary>
+        /// <param name="filter"></param>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Family>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<FamilyViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
-        public IActionResult GetFamily([FromRoute] long id)
+        public IActionResult GetFamily([FromRoute] long id, [FromQuery] LocationFilterViewModel? filter )
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var family = _unitOfWork.Entity.GetSingle(m => m.Id == id).FirstOrDefault();
+            var query = _unitOfWork.Entity.GetSingle(m => m.Id == id, f => f.Administrator, f => f.Members);
 
-            if (family == null)
+            if (query == null)
             {
                 throw new NotFoundException($"Family Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Family>(family));
+            // Apply filters
+            if (filter.BranchId.HasValue)
+                query = query.Where(x => x.Administrator.BranchId == filter.BranchId);
+
+            return Ok(_mapper.Map<FamilyViewModel>(query));
         }
 
+        /// <summary>
+        /// Update family
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="family"></param>
+        /// <returns></returns>
         // PUT: api/Family/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFamily([FromRoute] long id, [FromBody] Family family)
+        public async Task<IActionResult> PutFamily([FromRoute] long id, [FromBody] FamilyViewModel family)
         {
             if (!ModelState.IsValid)
             {
@@ -102,6 +135,7 @@ namespace OC.MembersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_family);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -127,7 +161,7 @@ namespace OC.MembersAPI.Controllers
         /// <param name="familyViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedFamilyIsActive(long id, [FromBody] Family familyViewModel)
+        public IActionResult UpdatedFamilyIsActive(long id, [FromBody] FamilyViewModel familyViewModel)
         {
             var family = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -144,7 +178,7 @@ namespace OC.MembersAPI.Controllers
         }
         // POST: api/Families
         [HttpPost]
-        public async Task<IActionResult> PostFamily([FromBody] Family family)
+        public async Task<IActionResult> PostFamily([FromBody] FamilyNewViewModel family)
         {
             if (!ModelState.IsValid)
             {
@@ -152,15 +186,12 @@ namespace OC.MembersAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newFamily = family;
-            // ADD OTHER DEFAULT VALUES HERE
-            if (this.FamilyExists(family.Id))
-                throw new BadRequestException("This family exists!!");
-
+            var newFamily = _mapper.Map<Family>(family);
+        
             _unitOfWork.Entity.Add(newFamily);
             await _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtAction("GetFamily", new { id = newFamily.Id }, newFamily);
+            return CreatedAtAction("PostFamily", new { id = newFamily.Id }, newFamily);
         }
 
         // DELETE: api/Families/5
@@ -178,8 +209,8 @@ namespace OC.MembersAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(family);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(family);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(family);
         }
@@ -188,5 +219,22 @@ namespace OC.MembersAPI.Controllers
         {
             return _unitOfWork.Entity.GetSingle(m => m.Id == id).Any();
         }
+
+        /*private IQueryable<Family> GetFamiliesQueryable(LocationFilterViewModel filter)
+        {
+            var query = _unitOfWork.Entity.AllIncludingQueryable(f => f.Administrator, f => f.Members);
+
+            if (filter.ContinentId.HasValue)
+                query = query.Where(x => x.Administrator.BranchId == filter.ContinentId);
+
+            if (filter.CountryId.HasValue)
+                query = query.Where(x => x.CountryId == filter.CountryId);
+
+            if (filter.RegionId.HasValue)
+                query = query.Where(x => x.RegionId == filter.RegionId);
+
+            if (filter.BranchId.HasValue)
+                query = query.Where(x => x.BranchId == filter.BranchId);
+        }*/
     }
 }

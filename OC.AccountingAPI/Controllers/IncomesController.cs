@@ -13,10 +13,10 @@ namespace OC.AccountingAPI.Controllers
     public class IncomesController : ControllerBase
     {
         private readonly ILogger _logger;
-        private IUnitOfWork<Income> _unitOfWork;
+        private IUnitOfWork<IncomeViewModel> _unitOfWork;
         private readonly IMapper _mapper;
 
-        public IncomesController(IMapper mapper, IUnitOfWork<Income> unitOfWork, ILogger<IncomesController> logger)
+        public IncomesController(IMapper mapper, IUnitOfWork<IncomeViewModel> unitOfWork, ILogger<IncomesController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -27,7 +27,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all income
         /// </summary>
         /// <returns>List of income</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Income>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomeViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetIncomes()
@@ -40,7 +40,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get all income
         /// </summary>
         /// <returns>List of income</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Income>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomeViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeincomes")]
         public IActionResult GetActiveIncomes()
@@ -53,7 +53,7 @@ namespace OC.AccountingAPI.Controllers
         /// Get income by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Income>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomeViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetIncome([FromRoute] long id)
@@ -70,12 +70,12 @@ namespace OC.AccountingAPI.Controllers
                 throw new NotFoundException($"Income Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Income>(income));
+            return Ok(_mapper.Map<IncomeViewModel>(income));
         }
 
         // PUT: api/Income/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIncome([FromRoute] long id, [FromBody] Income income)
+        public async Task<IActionResult> PutIncome([FromRoute] long id, [FromBody] IncomeViewModel income)
         {
             if (!ModelState.IsValid)
             {
@@ -132,7 +132,7 @@ namespace OC.AccountingAPI.Controllers
         /// <param name="incomeViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedIncomeIsActive(long id, [FromBody] Income incomeViewModel)
+        public IActionResult UpdatedIncomeIsActive(long id, [FromBody] IncomeViewModel incomeViewModel)
         {
             var income = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -149,7 +149,7 @@ namespace OC.AccountingAPI.Controllers
         }
         // POST: api/Incomes
         [HttpPost]
-        public async Task<IActionResult> PostIncome([FromBody] Income income)
+        public async Task<IActionResult> PostIncome([FromBody] IncomeViewModel income)
         {
             if (!ModelState.IsValid)
             {

@@ -1,9 +1,8 @@
-﻿using OC.Data.Repositories;
+﻿using Microsoft.AspNetCore.Http;
+using OC.Data.Repositories;
 using OC.Data.Repositories.Interfaces;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System.Threading.Tasks;
 
 namespace OC.Data.UnitOfWork
 {

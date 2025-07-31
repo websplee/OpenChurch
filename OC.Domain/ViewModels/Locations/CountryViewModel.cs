@@ -1,11 +1,4 @@
-﻿using OC.Domain.Models.Locations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace OC.Domain.ViewModels.Locations
+﻿namespace OC.Domain.ViewModels.Locations
 {
     public class CountryViewModel
     {
@@ -15,8 +8,11 @@ namespace OC.Domain.ViewModels.Locations
         public string ContinentName { get; set; }
         public string? Code { get; set; }
         public string Name { get; set; }
+        public int BanchesCount { get; set; }  // NOTE: Possible typo in TS: Should this be "Branches"?
+        public int RegionsCount { get; set; }
+        public bool IsActive { get; set; }
 
         // Relationships
-        public virtual ICollection<Region> Regions { get; set; }
+        //public virtual ICollection<RegionViewModel> Regions { get; set; }
     }
 }

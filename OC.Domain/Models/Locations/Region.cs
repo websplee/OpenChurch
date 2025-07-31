@@ -1,10 +1,5 @@
 ﻿using OC.Domain.Interfaces;
 using OC.Domain.Models.Branches;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OC.Domain.Models.Locations
 {
@@ -23,6 +18,7 @@ namespace OC.Domain.Models.Locations
         public string? OfficeLocation { get; set; }
 
         // Relationships
+        public virtual Country Country { get; set; }
         public virtual ICollection<Branch>? Branches { get; set; }
         public virtual ICollection<RegionLeadership>? RegionLeaderships { get; set; }
     }

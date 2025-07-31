@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchesAPI.Controllers
@@ -27,33 +28,33 @@ namespace OC.BranchesAPI.Controllers
         /// Get all cellLeadership
         /// </summary>
         /// <returns>List of cellLeadership</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetCellLeaderships()
         {
             var allCellLeaderships = _unitOfWork.Entity.GetAll();
-            return Ok(allCellLeaderships);
+            return Ok(_mapper.Map<IEnumerable<CellLeadershipViewModel>>(allCellLeaderships));
         }
 
         /// <summary>
         /// Get all cellLeadership
         /// </summary>
         /// <returns>List of cellLeadership</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activecellLeaderships")]
         public IActionResult GetActiveCellLeaderships()
         {
             var allCellLeaderships = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allCellLeaderships);
+            return Ok(_mapper.Map<IEnumerable<CellLeadershipViewModel>>(allCellLeaderships));
         }
 
         /// <summary>
         /// Get cellLeadership by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadership>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellLeadershipViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetCellLeadership([FromRoute] long id)
@@ -70,12 +71,12 @@ namespace OC.BranchesAPI.Controllers
                 throw new NotFoundException($"CellLeadership Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<CellLeadership>(cellLeadership));
+            return Ok(_mapper.Map<CellLeadershipViewModel>(cellLeadership));
         }
 
         // PUT: api/CellLeadership/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCellLeadership([FromRoute] long id, [FromBody] CellLeadership cellLeadership)
+        public async Task<IActionResult> PutCellLeadership([FromRoute] long id, [FromBody] CellLeadershipViewModel cellLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -102,6 +103,7 @@ namespace OC.BranchesAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_cellLeadership);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -127,7 +129,7 @@ namespace OC.BranchesAPI.Controllers
         /// <param name="cellLeadershipViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedCellLeadershipIsActive(long id, [FromBody] CellLeadership cellLeadershipViewModel)
+        public IActionResult UpdatedCellLeadershipIsActive(long id, [FromBody] CellLeadershipViewModel cellLeadershipViewModel)
         {
             var cellLeadership = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -144,7 +146,7 @@ namespace OC.BranchesAPI.Controllers
         }
         // POST: api/CellLeaderships
         [HttpPost]
-        public async Task<IActionResult> PostCellLeadership([FromBody] CellLeadership cellLeadership)
+        public async Task<IActionResult> PostCellLeadership([FromBody] CellLeadershipViewModel cellLeadership)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +154,7 @@ namespace OC.BranchesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newCellLeadership = cellLeadership;
+            var newCellLeadership = _mapper.Map<CellLeadership>(cellLeadership);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.CellLeadershipExists(cellLeadership.Id))
                 throw new BadRequestException("This cellLeadership exists!!");
@@ -178,8 +180,8 @@ namespace OC.BranchesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(cellLeadership);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(cellLeadership);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(cellLeadership);
         }

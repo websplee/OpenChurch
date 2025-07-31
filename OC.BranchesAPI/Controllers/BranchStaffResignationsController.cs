@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchStaffResignationAPI.Controllers
@@ -27,26 +28,26 @@ namespace OC.BranchStaffResignationAPI.Controllers
         /// Get all branchStaffResignation
         /// </summary>
         /// <returns>List of branchStaffResignation</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffResignation>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffResignationViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetBranchStaffResignation()
         {
             var allBranchStaffResignation = _unitOfWork.Entity.GetAll();
-            return Ok(allBranchStaffResignation);
+            return Ok(_mapper.Map<IEnumerable<BranchStaffResignationViewModel>>(allBranchStaffResignation));
         }
 
         /// <summary>
         /// Get all branchStaffResignation
         /// </summary>
         /// <returns>List of branchStaffResignation</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffResignation>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffResignationViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activebranchStaffResignations")]
         public IActionResult GetActiveBranchStaffResignation()
         {
             var allBranchStaffResignation = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allBranchStaffResignation);
+            return Ok(_mapper.Map<IEnumerable<BranchStaffResignationViewModel>>(allBranchStaffResignation));
         }
 
         /// <summary>
@@ -102,6 +103,7 @@ namespace OC.BranchStaffResignationAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(branchStaffResignation);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -144,7 +146,7 @@ namespace OC.BranchStaffResignationAPI.Controllers
         }
         // POST: api/BranchStaffResignation
         [HttpPost]
-        public async Task<IActionResult> PostBranchStaffResignation([FromBody] BranchStaffResignation branchStaffResignation)
+        public async Task<IActionResult> PostBranchStaffResignation([FromBody] BranchStaffResignationViewModel branchStaffResignation)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +154,7 @@ namespace OC.BranchStaffResignationAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newBranchStaffResignation = branchStaffResignation;
+            var newBranchStaffResignation = _mapper.Map<BranchStaffResignation>(branchStaffResignation);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.BranchStaffResignationExists(branchStaffResignation.Id))
                 throw new BadRequestException("This branchStaffResignation exists!!");
@@ -178,8 +180,8 @@ namespace OC.BranchStaffResignationAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(branchStaffResignation);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(branchStaffResignation);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(branchStaffResignation);
         }

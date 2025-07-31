@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchesAPI.Controllers
@@ -27,33 +28,33 @@ namespace OC.BranchesAPI.Controllers
         /// Get all branchStaff
         /// </summary>
         /// <returns>List of branchStaff</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaff>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetBranchStaffStaffs()
         {
             var allBranchStaffStaffs = _unitOfWork.Entity.GetAll();
-            return Ok(allBranchStaffStaffs);
+            return Ok(_mapper.Map<IEnumerable<BranchStaffViewModel>>(allBranchStaffStaffs));
         }
 
         /// <summary>
         /// Get all branchStaff
         /// </summary>
         /// <returns>List of branchStaff</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaff>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activebranchStaffs")]
         public IActionResult GetActiveBranchStaffStaffs()
         {
             var allBranchStaffStaffs = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allBranchStaffStaffs);
+            return Ok(_mapper.Map<IEnumerable<BranchStaffViewModel>>(allBranchStaffStaffs));
         }
 
         /// <summary>
         /// Get branchStaff by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaff>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchStaffViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetBranchStaff([FromRoute] long id)
@@ -70,12 +71,12 @@ namespace OC.BranchesAPI.Controllers
                 throw new NotFoundException($"BranchStaff Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<BranchStaff>(branchStaff));
+            return Ok(_mapper.Map<BranchStaffViewModel>(branchStaff));
         }
 
         // PUT: api/BranchStaff/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBranchStaff([FromRoute] long id, [FromBody] BranchStaff branchStaff)
+        public async Task<IActionResult> PutBranchStaff([FromRoute] long id, [FromBody] BranchStaffViewModel branchStaff)
         {
             if (!ModelState.IsValid)
             {
@@ -106,6 +107,7 @@ namespace OC.BranchesAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_branchStaff);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -131,7 +133,7 @@ namespace OC.BranchesAPI.Controllers
         /// <param name="branchStaffViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedBranchStaffIsActive(long id, [FromBody] BranchStaff branchStaffViewModel)
+        public IActionResult UpdatedBranchStaffIsActive(long id, [FromBody] BranchStaffViewModel branchStaffViewModel)
         {
             var branchStaff = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -148,7 +150,7 @@ namespace OC.BranchesAPI.Controllers
         }
         // POST: api/BranchStaffStaffs
         [HttpPost]
-        public async Task<IActionResult> PostBranchStaff([FromBody] BranchStaff branchStaff)
+        public async Task<IActionResult> PostBranchStaff([FromBody] BranchStaffViewModel branchStaff)
         {
             if (!ModelState.IsValid)
             {
@@ -156,7 +158,7 @@ namespace OC.BranchesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newBranchStaff = branchStaff;
+            var newBranchStaff = _mapper.Map<BranchStaff>(branchStaff);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.BranchStaffExists(branchStaff.Id))
                 throw new BadRequestException("This branchStaff exists!!");
@@ -182,8 +184,8 @@ namespace OC.BranchesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(branchStaff);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(branchStaff);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(branchStaff);
         }

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchesAPI.Controllers
@@ -14,12 +14,14 @@ namespace OC.BranchesAPI.Controllers
     {
         private readonly ILogger _logger;
         private IUnitOfWork<CellGroup> _unitOfWork;
+        private IUnitOfWork<CellGroupHost> _unitOfWorkHost;
         private readonly IMapper _mapper;
 
-        public CellGroupsController(IMapper mapper, IUnitOfWork<CellGroup> unitOfWork, ILogger<CellGroupsController> logger)
+        public CellGroupsController(IMapper mapper, IUnitOfWork<CellGroup> unitOfWork, IUnitOfWork<CellGroupHost> unitOfWorkHost, ILogger<CellGroupsController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
+            _unitOfWorkHost = unitOfWorkHost;
             _logger = logger;
         }
 
@@ -27,33 +29,33 @@ namespace OC.BranchesAPI.Controllers
         /// Get all cellGroup
         /// </summary>
         /// <returns>List of cellGroup</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroup>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupMiniViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetCellGroups()
         {
             var allCellGroups = _unitOfWork.Entity.GetAll();
-            return Ok(allCellGroups);
+            return Ok(_mapper.Map<IEnumerable<CellGroupMiniViewModel>>(allCellGroups));
         }
 
         /// <summary>
         /// Get all cellGroup
         /// </summary>
         /// <returns>List of cellGroup</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroup>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupMiniViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activecellGroups")]
         public IActionResult GetActiveCellGroups()
         {
             var allCellGroups = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allCellGroups);
+            return Ok(_mapper.Map<IEnumerable<CellGroupMiniViewModel>>(allCellGroups));
         }
 
         /// <summary>
         /// Get cellGroup by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroup>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetCellGroup([FromRoute] long id)
@@ -63,19 +65,24 @@ namespace OC.BranchesAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            var cellGroup = _unitOfWork.Entity.GetSingle(m => m.Id == id).FirstOrDefault();
+            var cellGroup = _unitOfWork.Entity.GetSingle(m => m.Id == id, c => c.Members, c => c.CellLeaderships).FirstOrDefault();
 
             if (cellGroup == null)
             {
                 throw new NotFoundException($"CellGroup Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<CellGroup>(cellGroup));
+            return Ok(_mapper.Map<CellGroupViewModel>(cellGroup));
         }
 
-        // PUT: api/CellGroup/5
+        /// <summary>
+        /// Update a cell group
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cellGroup"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCellGroup([FromRoute] long id, [FromBody] CellGroup cellGroup)
+        public async Task<IActionResult> PutCellGroup([FromRoute] long id, [FromBody] CellGroupNewViewModel cellGroup)
         {
             if (!ModelState.IsValid)
             {
@@ -95,12 +102,15 @@ namespace OC.BranchesAPI.Controllers
                 // Assign new values
                 _cellGroup.BranchId = cellGroup.BranchId;
                 _cellGroup.Name = cellGroup.Name;
+                _cellGroup.MeetingDay = cellGroup.MeetingDay;
+                _cellGroup.MeetingTime = cellGroup.MeetingTime;
                 _cellGroup.IsActive = cellGroup.IsActive;
             }
             // Implement state management of entities _context.Entry(cellGroup).State = EntityState.Modified;
 
             try
             {
+                _unitOfWork.Entity.Update(_cellGroup);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -115,7 +125,7 @@ namespace OC.BranchesAPI.Controllers
                 }
             }
 
-            return CreatedAtAction("CellGroupUpdate", new { id = _cellGroup.Id }, _cellGroup);
+            return CreatedAtAction("PutCellGroup", new { id = _cellGroup.Id }, _cellGroup);
         }
 
 
@@ -123,17 +133,17 @@ namespace OC.BranchesAPI.Controllers
         /// Update user
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="cellGroupViewModel"></param>
+        /// <param name="isActive"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedCellGroupIsActive(long id, [FromBody] CellGroup cellGroupViewModel)
+        public IActionResult UpdatedCellGroupIsActive(long id, bool isActive = false)
         {
             var cellGroup = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
             if (cellGroup == null)
                 throw new NotFoundException("CellGroup not found");
 
-            cellGroup.IsActive = cellGroupViewModel.IsActive;
+            cellGroup.IsActive = isActive;
 
             // save 
             _unitOfWork.Entity.Update(cellGroup);
@@ -141,9 +151,13 @@ namespace OC.BranchesAPI.Controllers
 
             return CreatedAtAction("UserDeactivated", new { id = cellGroup.Id }, cellGroup);
         }
-        // POST: api/CellGroups
+        /// <summary>
+        /// Create a new Cell Group
+        /// </summary>
+        /// <param name="cellGroup"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostCellGroup([FromBody] CellGroup cellGroup)
+        public async Task<IActionResult> PostCellGroup([FromBody] CellGroupNewViewModel cellGroup)
         {
             if (!ModelState.IsValid)
             {
@@ -151,15 +165,23 @@ namespace OC.BranchesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newCellGroup = cellGroup;
-            // ADD OTHER DEFAULT VALUES HERE
-            if (this.CellGroupExists(cellGroup.Id))
-                throw new BadRequestException("This cellGroup exists!!");
-
+            var newCellGroup = _mapper.Map<CellGroup>(cellGroup);
+     
             _unitOfWork.Entity.Add(newCellGroup);
             await _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtAction("GetCellGroup", new { id = newCellGroup.Id }, newCellGroup);
+            // Create a new host based on input
+            var newCellGroupHost = new CellGroupHost
+            {
+                CellGroupId = newCellGroup.Id,
+                MemberId = cellGroup.HostMemberId,
+            };
+
+            // Commit host details 
+            _unitOfWorkHost.Entity.Add(newCellGroupHost);
+            await _unitOfWorkHost.SaveChangesAsync();
+
+            return CreatedAtAction("PostCellGroup", new { id = newCellGroup.Id }, newCellGroup);
         }
 
         // DELETE: api/CellGroups/5
@@ -177,8 +199,8 @@ namespace OC.BranchesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(cellGroup);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(cellGroup);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(cellGroup);
         }

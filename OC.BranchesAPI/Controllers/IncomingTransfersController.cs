@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.IncomingTransfersAPI.Controllers
@@ -27,33 +28,33 @@ namespace OC.IncomingTransfersAPI.Controllers
         /// Get all incomingTransfer
         /// </summary>
         /// <returns>List of incomingTransfer</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransfer>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransferViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetIncomingTransfers()
         {
             var allIncomingTransfers = _unitOfWork.Entity.GetAll();
-            return Ok(allIncomingTransfers);
+            return Ok(_mapper.Map<IEnumerable<IncomingTransferViewModel>>(allIncomingTransfers));
         }
 
         /// <summary>
         /// Get all incomingTransfer
         /// </summary>
         /// <returns>List of incomingTransfer</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransfer>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransferViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeincomingTransfers")]
         public IActionResult GetActiveIncomingTransfers()
         {
             var allIncomingTransfers = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allIncomingTransfers);
+            return Ok(_mapper.Map<IEnumerable<IncomingTransferViewModel>>(allIncomingTransfers));
         }
 
         /// <summary>
         /// Get incomingTransfer by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransfer>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<IncomingTransferViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetIncomingTransfer([FromRoute] long id)
@@ -70,12 +71,12 @@ namespace OC.IncomingTransfersAPI.Controllers
                 throw new NotFoundException($"IncomingTransfer Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<IncomingTransfer>(incomingTransfer));
+            return Ok(_mapper.Map<IncomingTransferViewModel>(incomingTransfer));
         }
 
         // PUT: api/IncomingTransfer/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutIncomingTransfer([FromRoute] long id, [FromBody] IncomingTransfer incomingTransfer)
+        public async Task<IActionResult> PutIncomingTransfer([FromRoute] long id, [FromBody] IncomingTransferViewModel incomingTransfer)
         {
             if (!ModelState.IsValid)
             {
@@ -104,6 +105,7 @@ namespace OC.IncomingTransfersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_incomingTransfer);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -129,7 +131,7 @@ namespace OC.IncomingTransfersAPI.Controllers
         /// <param name="incomingTransferViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedIncomingTransferIsActive(long id, [FromBody] IncomingTransfer incomingTransferViewModel)
+        public IActionResult UpdatedIncomingTransferIsActive(long id, [FromBody] IncomingTransferViewModel incomingTransferViewModel)
         {
             var incomingTransfer = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -146,7 +148,7 @@ namespace OC.IncomingTransfersAPI.Controllers
         }
         // POST: api/IncomingTransfers
         [HttpPost]
-        public async Task<IActionResult> PostIncomingTransfer([FromBody] IncomingTransfer incomingTransfer)
+        public async Task<IActionResult> PostIncomingTransfer([FromBody] IncomingTransferViewModel incomingTransfer)
         {
             if (!ModelState.IsValid)
             {
@@ -154,7 +156,7 @@ namespace OC.IncomingTransfersAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newIncomingTransfer = incomingTransfer;
+            var newIncomingTransfer = _mapper.Map<IncomingTransfer>(incomingTransfer);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.IncomingTransferExists(incomingTransfer.Id))
                 throw new BadRequestException("This incomingTransfer exists!!");
@@ -180,8 +182,8 @@ namespace OC.IncomingTransfersAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(incomingTransfer);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(incomingTransfer);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(incomingTransfer);
         }

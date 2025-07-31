@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
@@ -27,33 +27,33 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
         /// Get all churchProgramSessionAttendance
         /// </summary>
         /// <returns>List of churchProgramSessionAttendance</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendance>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendanceViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetChurchProgramSessionAttendances()
         {
             var allChurchProgramSessionAttendances = _unitOfWork.Entity.AllIncluding(c => c.ChurchProgramSession);
-            return Ok(allChurchProgramSessionAttendances);
+            return Ok(_mapper.Map<IEnumerable<ChurchProgramSessionAttendanceViewModel>>(allChurchProgramSessionAttendances));
         }
 
         /// <summary>
         /// Get all churchProgramSessionAttendance
         /// </summary>
         /// <returns>List of churchProgramSessionAttendance</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendance>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendanceViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activechurchProgramSessionAttendances")]
         public IActionResult GetActiveChurchProgramSessionAttendances()
         {
             var allChurchProgramSessionAttendances = _unitOfWork.Entity.AllIncluding(c => c.ChurchProgramSession).Where(m => m.IsActive == true);
-            return Ok(allChurchProgramSessionAttendances);
+            return Ok(_mapper.Map<IEnumerable<ChurchProgramSessionAttendanceViewModel>>(allChurchProgramSessionAttendances));
         }
 
         /// <summary>
         /// Get churchProgramSessionAttendance by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendance>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionAttendanceViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetChurchProgramSessionAttendance([FromRoute] long id)
@@ -70,12 +70,12 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
                 throw new NotFoundException($"ChurchProgramSessionAttendance Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<ChurchProgramSessionAttendance>(churchProgramSessionAttendance));
+            return Ok(_mapper.Map<ChurchProgramSessionAttendanceViewModel>(churchProgramSessionAttendance));
         }
 
         // PUT: api/ChurchProgramSessionAttendance/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutChurchProgramSessionAttendance([FromRoute] long id, [FromBody] ChurchProgramSessionAttendance churchProgramSessionAttendance)
+        public async Task<IActionResult> PutChurchProgramSessionAttendance([FromRoute] long id, [FromBody] ChurchProgramSessionAttendanceViewModel churchProgramSessionAttendance)
         {
             if (!ModelState.IsValid)
             {
@@ -105,6 +105,7 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_churchProgramSessionAttendance);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -130,7 +131,7 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
         /// <param name="churchProgramSessionAttendanceViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedChurchProgramSessionAttendanceIsActive(long id, [FromBody] ChurchProgramSessionAttendance churchProgramSessionAttendanceViewModel)
+        public IActionResult UpdatedChurchProgramSessionAttendanceIsActive(long id, [FromBody] ChurchProgramSessionAttendanceViewModel churchProgramSessionAttendanceViewModel)
         {
             var churchProgramSessionAttendance = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -147,7 +148,7 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
         }
         // POST: api/ChurchProgramSessionAttendances
         [HttpPost]
-        public async Task<IActionResult> PostChurchProgramSessionAttendance([FromBody] ChurchProgramSessionAttendance churchProgramSessionAttendance)
+        public async Task<IActionResult> PostChurchProgramSessionAttendance([FromBody] ChurchProgramSessionAttendanceViewModel churchProgramSessionAttendance)
         {
             if (!ModelState.IsValid)
             {
@@ -155,7 +156,7 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newChurchProgramSessionAttendance = churchProgramSessionAttendance;
+            var newChurchProgramSessionAttendance = _mapper.Map< ChurchProgramSessionAttendance>(churchProgramSessionAttendance);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.ChurchProgramSessionAttendanceExists(churchProgramSessionAttendance.Id))
                 throw new BadRequestException("This churchProgramSessionAttendance exists!!");
@@ -181,9 +182,9 @@ namespace OC.ChurchProgramSessionAttendancesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(churchProgramSessionAttendance);
+           /* _unitOfWork.Entity.Delete(churchProgramSessionAttendance);
             await _unitOfWork.SaveChangesAsync();
-
+*/
             return Ok(churchProgramSessionAttendance);
         }
 

@@ -4,19 +4,20 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
-namespace OC.BranchesAPI.Properties
+namespace OC.BranchesAPI.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
     public class CellGroupHostsController : ControllerBase
     {
         private readonly ILogger _logger;
-        private IUnitOfWork<CellGroupHosts> _unitOfWork;
+        private IUnitOfWork<CellGroupHost> _unitOfWork;
         private readonly IMapper _mapper;
 
-        public CellGroupHostsController(IMapper mapper, IUnitOfWork<CellGroupHosts> unitOfWork, ILogger<CellGroupHostsController> logger)
+        public CellGroupHostsController(IMapper mapper, IUnitOfWork<CellGroupHost> unitOfWork, ILogger<CellGroupHostsController> logger)
         {
             _mapper = mapper;
             _unitOfWork = unitOfWork;
@@ -27,33 +28,33 @@ namespace OC.BranchesAPI.Properties
         /// Get all cellGroupHost
         /// </summary>
         /// <returns>List of cellGroupHost</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHosts>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHostViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetCellGroupHosts()
         {
             var allCellGroupHosts = _unitOfWork.Entity.GetAll();
-            return Ok(allCellGroupHosts);
+            return Ok(_mapper.Map<IEnumerable<CellGroupHostViewModel>>(allCellGroupHosts));
         }
 
         /// <summary>
         /// Get all cellGroupHost
         /// </summary>
         /// <returns>List of cellGroupHost</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHosts>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHostViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activecellGroupHosts")]
         public IActionResult GetActiveCellGroupHosts()
         {
             var allCellGroupHosts = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allCellGroupHosts);
+            return Ok(_mapper.Map<IEnumerable<CellGroupHostViewModel>>(allCellGroupHosts));
         }
 
         /// <summary>
         /// Get cellGroupHost by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHosts>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<CellGroupHostViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetCellGroupHost([FromRoute] long id)
@@ -70,12 +71,17 @@ namespace OC.BranchesAPI.Properties
                 throw new NotFoundException($"CellGroupHost Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<CellGroupHosts>(cellGroupHost));
+            return Ok(_mapper.Map<CellGroupHostViewModel>(cellGroupHost));
         }
 
-        // PUT: api/CellGroupHost/5
+        /// <summary>
+        /// Update cellGroupHost. Can also be used to update host Id (MemberId) 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="cellGroupHost"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCellGroupHost([FromRoute] long id, [FromBody] CellGroupHosts cellGroupHost)
+        public async Task<IActionResult> PutCellGroupHost([FromRoute] long id, [FromBody] CellGroupHost cellGroupHost)
         {
             if (!ModelState.IsValid)
             {
@@ -101,6 +107,7 @@ namespace OC.BranchesAPI.Properties
 
             try
             {
+                _unitOfWork.Entity.Update(_cellGroupHost);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -126,7 +133,7 @@ namespace OC.BranchesAPI.Properties
         /// <param name="cellGroupHostViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedCellGroupHostIsActive(long id, [FromBody] CellGroupHosts cellGroupHostViewModel)
+        public IActionResult UpdatedCellGroupHostIsActive(long id, [FromBody] CellGroupHostViewModel cellGroupHostViewModel)
         {
             var cellGroupHost = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -143,7 +150,7 @@ namespace OC.BranchesAPI.Properties
         }
         // POST: api/CellGroupHosts
         [HttpPost]
-        public async Task<IActionResult> PostCellGroupHost([FromBody] CellGroupHosts cellGroupHost)
+        public async Task<IActionResult> PostCellGroupHost([FromBody] CellGroupHostViewModel cellGroupHost)
         {
             if (!ModelState.IsValid)
             {
@@ -151,7 +158,7 @@ namespace OC.BranchesAPI.Properties
             }
 
             // Create the entity based on the View Model
-            var newCellGroupHost = cellGroupHost;
+            var newCellGroupHost = _mapper.Map<CellGroupHost>(cellGroupHost);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.CellGroupHostExists(cellGroupHost.Id))
                 throw new BadRequestException("This cellGroupHost exists!!");
@@ -177,8 +184,8 @@ namespace OC.BranchesAPI.Properties
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(cellGroupHost);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(cellGroupHost);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(cellGroupHost);
         }

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.ChurchProgramSessionsAPI.Controllers
@@ -27,35 +27,35 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
         /// Get all churchProgramSession
         /// </summary>
         /// <returns>List of churchProgramSession</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSession>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetChurchProgramSessions()
         {
             var allChurchProgramSessions = _unitOfWork.Entity.AllIncluding(c => c.ChurchProgramSessionAttendances, c => c.ChurchProgramSessionVisitors, 
                 c => c.Expenses, c => c.Incomes, c => c.Pledges, c => c.ChurchProgram, c => c.Branch);
-            return Ok(allChurchProgramSessions);
+            return Ok(_mapper.Map<IEnumerable<ChurchProgramSessionViewModel>> (allChurchProgramSessions));
         }
 
         /// <summary>
         /// Get all churchProgramSession
         /// </summary>
         /// <returns>List of churchProgramSession</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSession>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activechurchProgramSessions")]
         public IActionResult GetActiveChurchProgramSessions()
         {
             var allChurchProgramSessions = _unitOfWork.Entity.AllIncluding(c => c.ChurchProgramSessionAttendances, c => c.ChurchProgramSessionVisitors,
                 c => c.Expenses, c => c.Incomes, c => c.Pledges, c => c.ChurchProgram, c => c.Branch).Where(m => m.IsActive == true);
-            return Ok(allChurchProgramSessions);
+            return Ok(_mapper.Map<IEnumerable<ChurchProgramSessionViewModel>>(allChurchProgramSessions));
         }
 
         /// <summary>
         /// Get churchProgramSession by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSession>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<ChurchProgramSessionViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetChurchProgramSession([FromRoute] long id)
@@ -73,12 +73,12 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
                 throw new NotFoundException($"ChurchProgramSession Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<ChurchProgramSession>(churchProgramSession));
+            return Ok(_mapper.Map<ChurchProgramSessionViewModel>(churchProgramSession));
         }
 
         // PUT: api/ChurchProgramSession/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutChurchProgramSession([FromRoute] long id, [FromBody] ChurchProgramSession churchProgramSession)
+        public async Task<IActionResult> PutChurchProgramSession([FromRoute] long id, [FromBody] ChurchProgramSessionViewModel churchProgramSession)
         {
             if (!ModelState.IsValid)
             {
@@ -107,6 +107,7 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_churchProgramSession);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -132,7 +133,7 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
         /// <param name="churchProgramSessionViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedChurchProgramSessionIsActive(long id, [FromBody] ChurchProgramSession churchProgramSessionViewModel)
+        public IActionResult UpdatedChurchProgramSessionIsActive(long id, [FromBody] ChurchProgramSessionViewModel churchProgramSessionViewModel)
         {
             var churchProgramSession = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -149,7 +150,7 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
         }
         // POST: api/ChurchProgramSessions
         [HttpPost]
-        public async Task<IActionResult> PostChurchProgramSession([FromBody] ChurchProgramSession churchProgramSession)
+        public async Task<IActionResult> PostChurchProgramSession([FromBody] ChurchProgramSessionViewModel churchProgramSession)
         {
             if (!ModelState.IsValid)
             {
@@ -157,7 +158,7 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newChurchProgramSession = churchProgramSession;
+            var newChurchProgramSession = _mapper.Map<ChurchProgramSession>(churchProgramSession);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.ChurchProgramSessionExists(churchProgramSession.Id))
                 throw new BadRequestException("This churchProgramSession exists!!");
@@ -183,8 +184,8 @@ namespace OC.ChurchProgramSessionsAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(churchProgramSession);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(churchProgramSession);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(churchProgramSession);
         }

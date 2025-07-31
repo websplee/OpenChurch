@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Members;
+using OC.Domain.ViewModels.Members;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.MembersAPI.Controllers
@@ -27,7 +28,7 @@ namespace OC.MembersAPI.Controllers
         /// Get all leadershipRole
         /// </summary>
         /// <returns>List of leadershipRole</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRole>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRoleViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetLeadershipRoles()
@@ -40,7 +41,7 @@ namespace OC.MembersAPI.Controllers
         /// Get all leadershipRole
         /// </summary>
         /// <returns>List of leadershipRole</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRole>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRoleViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeleadershipRoles")]
         public IActionResult GetActiveLeadershipRoles()
@@ -53,7 +54,7 @@ namespace OC.MembersAPI.Controllers
         /// Get leadershipRole by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRole>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<LeadershipRoleViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetLeadershipRole([FromRoute] long id)
@@ -70,12 +71,12 @@ namespace OC.MembersAPI.Controllers
                 throw new NotFoundException($"LeadershipRole Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<LeadershipRole>(leadershipRole));
+            return Ok(_mapper.Map<LeadershipRoleViewModel>(leadershipRole));
         }
 
         // PUT: api/LeadershipRole/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLeadershipRole([FromRoute] long id, [FromBody] LeadershipRole leadershipRole)
+        public async Task<IActionResult> PutLeadershipRole([FromRoute] long id, [FromBody] LeadershipRoleViewModel leadershipRole)
         {
             if (!ModelState.IsValid)
             {
@@ -102,6 +103,7 @@ namespace OC.MembersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_leadershipRole);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -127,7 +129,7 @@ namespace OC.MembersAPI.Controllers
         /// <param name="leadershipRoleViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedLeadershipRoleIsActive(long id, [FromBody] LeadershipRole leadershipRoleViewModel)
+        public IActionResult UpdatedLeadershipRoleIsActive(long id, [FromBody] LeadershipRoleViewModel leadershipRoleViewModel)
         {
             var leadershipRole = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -144,7 +146,7 @@ namespace OC.MembersAPI.Controllers
         }
         // POST: api/LeadershipRoles
         [HttpPost]
-        public async Task<IActionResult> PostLeadershipRole([FromBody] LeadershipRole leadershipRole)
+        public async Task<IActionResult> PostLeadershipRole([FromBody] LeadershipRoleViewModel leadershipRole)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +154,7 @@ namespace OC.MembersAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newLeadershipRole = leadershipRole;
+            var newLeadershipRole = _mapper.Map<LeadershipRole>(leadershipRole);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.LeadershipRoleExists(leadershipRole.Id))
                 throw new BadRequestException("This leadershipRole exists!!");

@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
+using OC.Domain.ViewModels.Branches;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.MinistriesAPI.Controllers
@@ -27,33 +27,33 @@ namespace OC.MinistriesAPI.Controllers
         /// Get all ministry
         /// </summary>
         /// <returns>List of ministry</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Ministry>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MinistryViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
         public IActionResult GetMinistries()
         {
             var allMinistries = _unitOfWork.Entity.GetAll();
-            return Ok(allMinistries);
+            return Ok(_mapper.Map<IEnumerable<MinistryViewModel>>(allMinistries));
         }
 
         /// <summary>
         /// Get all ministry
         /// </summary>
         /// <returns>List of ministry</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Ministry>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MinistryViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activeministrys")]
         public IActionResult GetActiveMinistries()
         {
             var allMinistries = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allMinistries);
+            return Ok(_mapper.Map<IEnumerable<MinistryViewModel>>(allMinistries));
         }
 
         /// <summary>
         /// Get ministry by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Ministry>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<MinistryViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetMinistry([FromRoute] long id)
@@ -70,12 +70,12 @@ namespace OC.MinistriesAPI.Controllers
                 throw new NotFoundException($"Ministry Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Ministry>(ministry));
+            return Ok(_mapper.Map<MinistryViewModel>(ministry));
         }
 
         // PUT: api/Ministry/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMinistry([FromRoute] long id, [FromBody] Ministry ministry)
+        public async Task<IActionResult> PutMinistry([FromRoute] long id, [FromBody] MinistryViewModel ministry)
         {
             if (!ModelState.IsValid)
             {
@@ -102,6 +102,7 @@ namespace OC.MinistriesAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_ministry);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -127,7 +128,7 @@ namespace OC.MinistriesAPI.Controllers
         /// <param name="ministryViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedMinistryIsActive(long id, [FromBody] Ministry ministryViewModel)
+        public IActionResult UpdatedMinistryIsActive(long id, [FromBody] MinistryViewModel ministryViewModel)
         {
             var ministry = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -144,7 +145,7 @@ namespace OC.MinistriesAPI.Controllers
         }
         // POST: api/Ministries
         [HttpPost]
-        public async Task<IActionResult> PostMinistry([FromBody] Ministry ministry)
+        public async Task<IActionResult> PostMinistry([FromBody] MinistryViewModel ministry)
         {
             if (!ModelState.IsValid)
             {
@@ -152,7 +153,7 @@ namespace OC.MinistriesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newMinistry = ministry;
+            var newMinistry = _mapper.Map<Ministry>(ministry);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.MinistryExists(ministry.Id))
                 throw new BadRequestException("This ministry exists!!");
@@ -178,8 +179,8 @@ namespace OC.MinistriesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(ministry);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(ministry);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(ministry);
         }

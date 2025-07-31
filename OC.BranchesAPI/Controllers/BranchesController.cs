@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OC.Data.UnitOfWork.Interfaces;
 using OC.Domain.Models.Branches;
 using OC.Domain.Models.Locations;
+using OC.Domain.ViewModels.Branches;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 
 namespace OC.BranchesAPI.Controllers
@@ -28,33 +31,40 @@ namespace OC.BranchesAPI.Controllers
         /// Get all branch
         /// </summary>
         /// <returns>List of branch</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Branch>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetBranches()
         {
-            var allBranches = _unitOfWork.Entity.GetAll();
-            return Ok(allBranches);
+            var allBranches = _unitOfWork.Entity.AllIncluding(f => f.Members, f => f.CellGroups, f => f.ChurchProgramSessions);
+               
+
+            var branchViewModels = _mapper
+                .Map<IEnumerable<BranchMiniViewModel>>(allBranches);
+                
+
+            return Ok(branchViewModels);
         }
 
         /// <summary>
         /// Get all branch
         /// </summary>
         /// <returns>List of branch</returns>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Branch>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchViewModel>))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpGet("activebranchs")]
         public IActionResult GetActiveBranches()
         {
             var allBranches = _unitOfWork.Entity.GetAll().Where(m => m.IsActive == true);
-            return Ok(allBranches);
+            return Ok(_mapper.Map<IEnumerable<BranchViewModel>>(allBranches));
         }
 
         /// <summary>
         /// Get branch by Id
         /// </summary>
         /// <param name="id"></param>
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<Branch>))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<BranchViewModel>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("{id}")]
         public IActionResult GetBranch([FromRoute] long id)
@@ -71,12 +81,12 @@ namespace OC.BranchesAPI.Controllers
                 throw new NotFoundException($"Branch Id {id} did not bring up any records!!");
             }
 
-            return Ok(_mapper.Map<Branch>(branch));
+            return Ok(_mapper.Map<BranchViewModel>(branch));
         }
 
         // PUT: api/Branch/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBranch([FromRoute] long id, [FromBody] Branch branch)
+        public async Task<IActionResult> PutBranch([FromRoute] long id, [FromBody] BranchViewModel branch)
         {
             if (!ModelState.IsValid)
             {
@@ -109,6 +119,7 @@ namespace OC.BranchesAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(_branch);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -134,7 +145,7 @@ namespace OC.BranchesAPI.Controllers
         /// <param name="branchViewModel"></param>
         /// <returns></returns>
         [HttpPut("updateisactive/{id}")]
-        public IActionResult UpdatedBranchIsActive(long id, [FromBody] Branch branchViewModel)
+        public IActionResult UpdatedBranchIsActive(long id, [FromBody] BranchViewModel branchViewModel)
         {
             var branch = _unitOfWork.Entity.GetSingle(x => x.Id == id).First();
 
@@ -149,9 +160,16 @@ namespace OC.BranchesAPI.Controllers
 
             return CreatedAtAction("UserDeactivated", new { id = branch.Id }, branch);
         }
-        // POST: api/Branches
+
+
+        /// <summary>
+        /// Create a new branch
+        /// </summary>
+        /// <param name="branch"></param>
+        /// <returns></returns>
+        /// <exception cref="BadRequestException"></exception>
         [HttpPost]
-        public async Task<IActionResult> PostBranch([FromBody] Branch branch)
+        public async Task<IActionResult> PostBranch([FromBody] BranchNewViewModel branch)
         {
             if (!ModelState.IsValid)
             {
@@ -159,7 +177,7 @@ namespace OC.BranchesAPI.Controllers
             }
 
             // Create the entity based on the View Model
-            var newBranch = branch;
+            var newBranch = _mapper.Map<Branch>(branch);
             // ADD OTHER DEFAULT VALUES HERE
             if (this.BranchExists(branch.Id))
                 throw new BadRequestException("This branch exists!!");
@@ -167,7 +185,7 @@ namespace OC.BranchesAPI.Controllers
             _unitOfWork.Entity.Add(newBranch);
             await _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtAction("GetBranch", new { id = newBranch.Id }, newBranch);
+            return CreatedAtAction("PostBranch", new { id = newBranch.Id }, newBranch);
         }
 
         // DELETE: api/Branches/5
@@ -185,8 +203,8 @@ namespace OC.BranchesAPI.Controllers
                 return NotFound();
             }
 
-            _unitOfWork.Entity.Delete(branch);
-            await _unitOfWork.SaveChangesAsync();
+            /*_unitOfWork.Entity.Delete(branch);
+            await _unitOfWork.SaveChangesAsync();*/
 
             return Ok(branch);
         }

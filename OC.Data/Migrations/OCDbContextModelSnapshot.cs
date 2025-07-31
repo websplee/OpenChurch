@@ -52,49 +52,49 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = "bdf53b89-5034-4dfa-8d2b-7441ce66a535",
-                            ConcurrencyStamp = "4fa6351e-a7e4-47f5-b379-2bf3c7f193bc",
+                            ConcurrencyStamp = "d48f050c-1abf-4aca-8f0e-2640d2995ba9",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "f077ed29-51b7-4fe7-8136-c65b8e7b3f15",
-                            ConcurrencyStamp = "0ab43e01-aeb4-4320-8c64-3ca864ab7bb7",
+                            ConcurrencyStamp = "9be39d60-d07c-48ca-8710-084d8a761ce4",
                             Name = "BranchUser",
                             NormalizedName = "BRANCHUSER"
                         },
                         new
                         {
                             Id = "a173a5cc-3edc-4f49-979c-f423e044b202",
-                            ConcurrencyStamp = "14cc0f2e-735e-4510-ad69-d0ab50adf8b3",
+                            ConcurrencyStamp = "379836c8-c106-4541-809f-71b57aa535e3",
                             Name = "Member",
                             NormalizedName = "MEMBER"
                         },
                         new
                         {
                             Id = "f0223225-0c52-413d-b188-0868ea111427",
-                            ConcurrencyStamp = "ed909ec7-65f4-4e0c-be59-49bda8e47f7e",
+                            ConcurrencyStamp = "932b56ec-5984-442a-8a27-f6a51aa1baf1",
                             Name = "Visitor",
                             NormalizedName = "VISITOR"
                         },
                         new
                         {
                             Id = "575759c6-e020-4c4b-888d-24e01ba62797",
-                            ConcurrencyStamp = "aeaabffb-5c77-4ec0-a82c-1ff35d1f3518",
+                            ConcurrencyStamp = "8555cc39-f634-4a94-a1a7-85d73c8d588f",
                             Name = "Pastor",
                             NormalizedName = "PASTOR"
                         },
                         new
                         {
                             Id = "0a8baeb0-7191-4731-b8f2-a8b22b5a8596",
-                            ConcurrencyStamp = "91d0fd41-b032-4037-99f2-6edc33fc6e90",
+                            ConcurrencyStamp = "3caa0a31-59a5-4da7-aae7-b0ce9dfc1260",
                             Name = "CellGroupLeader",
                             NormalizedName = "CELLGROUPLEADER"
                         },
                         new
                         {
                             Id = "a1922985-be01-4762-a2b6-32d6f4f58235",
-                            ConcurrencyStamp = "c49f2336-b3b7-41dc-8165-9fc40a34c697",
+                            ConcurrencyStamp = "082e10a4-cd9a-4be4-bfe4-043eda4e0535",
                             Name = "MinistryLeader",
                             NormalizedName = "MINISTRYLEADER"
                         });
@@ -592,7 +592,7 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8553),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(820),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Email = "chawamabranch@blci.com",
                             IsActive = true,
@@ -605,12 +605,12 @@ namespace OC.Data.Migrations
                             Phone2 = "",
                             PhysicalAddress = "Plot 10, Chawama Road",
                             RegionId = 6L,
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8549)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(812)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8567),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(831),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Email = "chilangabranch@blci.com",
                             IsActive = true,
@@ -623,12 +623,12 @@ namespace OC.Data.Migrations
                             Phone2 = "",
                             PhysicalAddress = "Plot 3, Munda Wanga",
                             RegionId = 6L,
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8566)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(830)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8572),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(837),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Email = "chongwebranch@blci.com",
                             IsActive = true,
@@ -641,12 +641,12 @@ namespace OC.Data.Migrations
                             Phone2 = "",
                             PhysicalAddress = "Corner Great East Road",
                             RegionId = 6L,
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8571)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(836)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8581),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(842),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Email = "chisambabranch@blci.com",
                             IsActive = true,
@@ -659,12 +659,12 @@ namespace OC.Data.Migrations
                             Phone2 = "",
                             PhysicalAddress = "Town Centre",
                             RegionId = 6L,
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8580)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(841)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8584),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(855),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Email = "chisambabranch@blci.com",
                             IsActive = true,
@@ -677,7 +677,7 @@ namespace OC.Data.Migrations
                             Phone2 = "",
                             PhysicalAddress = "William Farm",
                             RegionId = 6L,
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(8583)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(852)
                         });
                 });
 
@@ -937,6 +937,14 @@ namespace OC.Data.Migrations
                     b.Property<string>("MakerId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MeetingDay")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MeetingTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -952,6 +960,47 @@ namespace OC.Data.Migrations
                     b.HasIndex("BranchId");
 
                     b.ToTable("tblCellGroups", (string)null);
+                });
+
+            modelBuilder.Entity("OC.Domain.Models.Branches.CellGroupHost", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long>("CellGroupId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CheckerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MakerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("MemberId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("RejectionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CellGroupId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("tblCellGroupHosts", (string)null);
                 });
 
             modelBuilder.Entity("OC.Domain.Models.Branches.CellLeadership", b =>
@@ -1041,79 +1090,79 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9456),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2915),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Sunday First Service",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Sunday First Service",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9455)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2911)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9459),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2920),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Sunday Second Service",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Sunday Second Service",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9459)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2919)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9462),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2924),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Sunday Youth Service",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Sunday Youth Service",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9461)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2923)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9464),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2927),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Sunday Local Language Service",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Sunday Local Language Service",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9464)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2926)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9467),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2930),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Mid-week Service",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Mid-week Service",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9466)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2929)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9469),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2933),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "3 Days of Power conference",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "3 Days of Power",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9468)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2932)
                         },
                         new
                         {
                             Id = 7L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9471),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2936),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Easter Conference",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Easter Conference",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 476, DateTimeKind.Utc).AddTicks(9470)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(2935)
                         });
                 });
 
@@ -1427,6 +1476,57 @@ namespace OC.Data.Migrations
                     b.ToTable("tblOutgoingTransfers", (string)null);
                 });
 
+            modelBuilder.Entity("OC.Domain.Models.Locations.ChurchSettings", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("ApprovalDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("BranchId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CheckerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FounderDetails")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FoundingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MakerId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RejectionDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SubmissionDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BranchId");
+
+                    b.ToTable("tblChurchSettings", (string)null);
+                });
+
             modelBuilder.Entity("OC.Domain.Models.Locations.Continent", b =>
                 {
                     b.Property<long>("Id")
@@ -1465,56 +1565,56 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(75),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4162),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Africa",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(73)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4161)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(77),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4171),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Australia",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(77)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4170)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(79),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4174),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "North America",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(79)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4173)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(81),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4344),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "South America",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(81)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4343)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(84),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4347),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Europe",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(83)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4346)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(85),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4349),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Asia",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(85)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4348)
                         });
                 });
 
@@ -1564,112 +1664,112 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(178),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4615),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "zm",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Zambia",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(178)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4614)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(185),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4619),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "cd",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Democratic Republic of Congo",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(184)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4619)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(188),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4623),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "na",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Namibia",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(187)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4622)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(190),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4626),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "za",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "South Africa",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(190)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4625)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(192),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4629),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "mw",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Malawi",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(192)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4628)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(196),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4632),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "tz",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Tanzania",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(195)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4631)
                         },
                         new
                         {
                             Id = 7L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(198),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4635),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "bw",
                             ContinentId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Botswana",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(198)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4634)
                         },
                         new
                         {
                             Id = 8L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(200),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4637),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "us",
                             ContinentId = 3L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "United States",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(200)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4637)
                         },
                         new
                         {
                             Id = 9L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(202),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4640),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "au",
                             ContinentId = 2L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Australia",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(202)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4639)
                         },
                         new
                         {
                             Id = 10L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(204),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4643),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Code = "gb",
                             ContinentId = 5L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "United Kingdom",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(204)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4642)
                         });
                 });
 
@@ -1719,112 +1819,112 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(301),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4807),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "North-Western",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(299)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4806)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(304),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4812),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Northern",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(303)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4811)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(307),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4821),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Muchinga",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(307)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4820)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(310),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4825),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Luapula",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(309)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4824)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(312),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4828),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Eastern",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(312)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4827)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(314),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4831),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Lusaka",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(314)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4830)
                         },
                         new
                         {
                             Id = 7L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(317),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4834),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Central",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(316)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4833)
                         },
                         new
                         {
                             Id = 8L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(319),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4837),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Copperbelt-South",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(318)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4836)
                         },
                         new
                         {
                             Id = 9L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(321),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4840),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Copperbelt-North",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(320)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4839)
                         },
                         new
                         {
                             Id = 10L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(323),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4842),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Southern",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(322)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4842)
                         },
                         new
                         {
                             Id = 11L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(325),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4845),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             CountryId = 1L,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Western",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(324)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(4844)
                         });
                 });
 
@@ -1947,74 +2047,74 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(587),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5284),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "None",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(586)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5283)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(589),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5288),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Doctorate (PhD)",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(589)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5287)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(591),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5290),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Masters",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(591)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5290)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(593),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5293),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Degree",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(592)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5292)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(595),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5295),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Diploma",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(594)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5295)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(597),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5298),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Certificate",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(596)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5297)
                         },
                         new
                         {
                             Id = 7L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(598),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5300),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Secondary Ed.",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(598)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5299)
                         },
                         new
                         {
                             Id = 8L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(600),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5303),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Primary Ed.",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 477, DateTimeKind.Utc).AddTicks(600)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 661, DateTimeKind.Utc).AddTicks(5302)
                         });
                 });
 
@@ -2343,29 +2443,29 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9130),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5916),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Cash",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9127)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5911)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9136),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5923),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Mobile Money",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9134)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5922)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9140),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5926),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Card",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9139)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(5925)
                         });
                 });
 
@@ -2414,79 +2514,79 @@ namespace OC.Data.Migrations
                         new
                         {
                             Id = 1L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9223),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6058),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Master access to all modules",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Admin",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9222)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6056)
                         },
                         new
                         {
                             Id = 2L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9228),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6064),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Users Management System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Users",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9228)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6064)
                         },
                         new
                         {
                             Id = 3L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9230),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6068),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Accounting System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Accounting",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9230)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6067)
                         },
                         new
                         {
                             Id = 4L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9233),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6071),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Reporting System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Reports",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9232)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6071)
                         },
                         new
                         {
                             Id = 5L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9235),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6075),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Branches System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Branches",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9234)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6074)
                         },
                         new
                         {
                             Id = 6L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9237),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6078),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Locations System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Locations",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9236)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6077)
                         },
                         new
                         {
                             Id = 7L,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9239),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6081),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Description = "Members System Module",
                             IsActive = true,
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             Name = "Members",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9239)
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(6080)
                         });
                 });
 
@@ -2654,9 +2754,9 @@ namespace OC.Data.Migrations
                         {
                             Id = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             AccessFailedCount = 0,
-                            ApprovalDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9924),
+                            ApprovalDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(7035),
                             CheckerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
-                            ConcurrencyStamp = "4035a923-8dde-4187-b713-caf3cd692bfd",
+                            ConcurrencyStamp = "f9c13b05-4747-43e9-9b3c-926be15e28f0",
                             Description = "Systems Administrator",
                             Email = "superadmin@blci.com",
                             EmailConfirmed = true,
@@ -2667,10 +2767,10 @@ namespace OC.Data.Migrations
                             MakerId = "8a4353dd-5496-4ffe-bfa3-db90afab6684",
                             NormalizedEmail = "SUPERADMIN@BLCI.COM",
                             NormalizedUserName = "SUPERADMIN@BLCI.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEPZXBPzXdQX4x+Xfd9jSiwfdGvYVlKqw9ghFQW2l1+8JNy5zpu4zv0iUEIqu+FWRIA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEGtNFTCG2PexQQMdAoqj3QvSW14QE76fq0zcNvb57x/o1gkvCdBsQhqzgJTavUaDzg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "1eb4ee78-6b9d-469d-beef-11e78b13b473",
-                            SubmissionDate = new DateTime(2024, 3, 30, 11, 59, 8, 478, DateTimeKind.Utc).AddTicks(9923),
+                            SecurityStamp = "965166fb-61cb-4d12-9f93-5043a43d38f9",
+                            SubmissionDate = new DateTime(2025, 7, 30, 20, 9, 6, 664, DateTimeKind.Utc).AddTicks(7034),
                             TwoFactorEnabled = false,
                             UserName = "superadmin@blci.com"
                         });
@@ -2923,6 +3023,25 @@ namespace OC.Data.Migrations
                     b.Navigation("Branch");
                 });
 
+            modelBuilder.Entity("OC.Domain.Models.Branches.CellGroupHost", b =>
+                {
+                    b.HasOne("OC.Domain.Models.Branches.CellGroup", "CellGroup")
+                        .WithMany()
+                        .HasForeignKey("CellGroupId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("OC.Domain.Models.Members.Member", "Host")
+                        .WithMany()
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("CellGroup");
+
+                    b.Navigation("Host");
+                });
+
             modelBuilder.Entity("OC.Domain.Models.Branches.CellLeadership", b =>
                 {
                     b.HasOne("OC.Domain.Models.Branches.CellGroup", "CellGroup")
@@ -3028,6 +3147,16 @@ namespace OC.Data.Migrations
                     b.Navigation("Member");
                 });
 
+            modelBuilder.Entity("OC.Domain.Models.Locations.ChurchSettings", b =>
+                {
+                    b.HasOne("OC.Domain.Models.Branches.Branch", "Branch")
+                        .WithMany()
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Branch");
+                });
+
             modelBuilder.Entity("OC.Domain.Models.Locations.Country", b =>
                 {
                     b.HasOne("OC.Domain.Models.Locations.Continent", "Continent")
@@ -3041,11 +3170,13 @@ namespace OC.Data.Migrations
 
             modelBuilder.Entity("OC.Domain.Models.Locations.Region", b =>
                 {
-                    b.HasOne("OC.Domain.Models.Locations.Country", null)
+                    b.HasOne("OC.Domain.Models.Locations.Country", "Country")
                         .WithMany("Regions")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("OC.Domain.Models.Locations.RegionLeadership", b =>

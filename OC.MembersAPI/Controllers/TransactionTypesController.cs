@@ -102,6 +102,7 @@ namespace OC.MembersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(transactionType); 
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

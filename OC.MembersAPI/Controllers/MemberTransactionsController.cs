@@ -107,6 +107,7 @@ namespace OC.MembersAPI.Controllers
 
             try
             {
+                _unitOfWork.Entity.Update(memberTransaction);
                 await _unitOfWork.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
@@ -165,7 +166,9 @@ namespace OC.MembersAPI.Controllers
             _unitOfWork.Entity.Add(newMemberTransaction);
             await _unitOfWork.SaveChangesAsync();
 
-            return CreatedAtAction("GetMemberTransaction", new { id = newMemberTransaction.Id }, newMemberTransaction);
+            var insertedRec = _unitOfWork.Entity.GetSingle(m => m.Id == newMemberTransaction.Id, m => m.Member, m => m.TransactionType);
+
+            return CreatedAtAction("GetMemberTransaction", new { id = newMemberTransaction.Id }, insertedRec);
         }
 
         // DELETE: api/MemberTransactions/5

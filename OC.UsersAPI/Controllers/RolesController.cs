@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CrystalBLCore.BusinessServices.CustomExceptions.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OC.Domain.ViewModels.Users;
@@ -93,7 +94,7 @@ namespace OC.UsersAPI.Controllers
             await _roleManager.UpdateAsync(_role);
 
 
-            return CreatedAtAction("RolesUpdate", new { id = _role.Id }, _role);
+            return CreatedAtAction("PutRole", new { id = _role.Id }, _role);
         }
 
         /// <summary>

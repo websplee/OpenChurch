@@ -16,7 +16,7 @@ namespace OC.Domain.ViewModels.Users
         public bool? LockoutEnabled { get; set; }
         public bool? IsLockedout { get; set; }
         public bool? IsFirstLogin { get; set; }
-        public DateTime? LockoutEnd { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
         public string? MakerId { get; set; }
         public DateTime SubmissionDate { get; set; } = DateTime.UtcNow;
         public string? CheckerId { get; set; }
